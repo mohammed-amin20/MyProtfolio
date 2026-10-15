@@ -7,15 +7,15 @@ import re
 projects = [
  dict(id='devz', folder='devz', name='devZ', category='community', label='Developer community', color='#67d9ed', logo='logo.png', title='A place to ask.<br>A community to grow.', description='A developer Q&A community with coding questions, profiles, company job postings, and moderation tools.', role='Android frontend · Graduation project', contribution='Implemented Android interfaces and frontend state with Clean Architecture and MVI, across community, company, and admin experiences.', tags=['Kotlin','Jetpack Compose','Clean Architecture','MVI'], features=['Questions & answers','Jobs & companies','Admin tools'], repo='https://github.com/mohammed-amin20/devz', note='Screens rendered from the actual Compose UI using automated screenshot tests.'),
  dict(id='memo', folder='memo', name='Memo', category='productivity', label='Offline notes', color='#a7dce0', logo='logo.png', title='Small thoughts.<br>Room for big ideas.', description='An on-device notes app with search, categories, pinned notes, and a PIN-protected hidden notes area.', role='Android application', contribution='Local note management with Room, reactive Compose interfaces, bilingual layouts, and light and dark themes.', tags=['Kotlin','Jetpack Compose','Room','Hilt'], features=['Offline notes','Search & categories','Hidden notes'], repo='https://github.com/mohammed-amin20/Memo', note='Compose preview renders of the actual UI, including editor, vault, and account states.'),
- dict(id='dictionary', folder='Dictionary', name='Dictionary', category='reference', label='Language & learning', color='#e6c879', logo='logo.png', title='Find the word.<br>Understand the meaning.', description='English word lookup with definitions, phonetics, pronunciation audio, and Arabic translation in a focused reading interface.', role='Android application', contribution='A Kotlin and Compose app with an MVI presentation layer, API integration, and clear loading and connectivity states.', tags=['Kotlin','Jetpack Compose','MVI','Retrofit'], features=['Word definitions','Audio pronunciation','Arabic translation'], repo='https://github.com/mohammed-amin20/Dictionary', note='Supplied app captures showing lookup, results, loading, and connectivity states.'),
- dict(id='rick', folder='rick&morty', name='Rick & Morty', category='entertainment', label='Character explorer', color='#b4e777', logo='portal-logo.svg', title='One app.<br>A whole multiverse.', description='A character explorer with cinematic cards, live search, detailed profiles, and playful loading and empty states.', role='Android application', contribution='Clean Architecture and MVI with API-backed character browsing, Room caching, and shared-element navigation.', tags=['Kotlin','Jetpack Compose','Room','Retrofit'], features=['Character search','Rich profiles','Offline cache'], repo='https://github.com/mohammed-amin20/Rick-And-Morty', note='Supplied device captures in both themes, including character and network states.'),
+ dict(id='dictionary', folder='dictionary', name='Dictionary', category='reference', label='Language & learning', color='#e6c879', logo='logo.png', title='Find the word.<br>Understand the meaning.', description='English word lookup with definitions, phonetics, pronunciation audio, and Arabic translation in a focused reading interface.', role='Android application', contribution='A Kotlin and Compose app with an MVI presentation layer, API integration, and clear loading and connectivity states.', tags=['Kotlin','Jetpack Compose','MVI','Retrofit'], features=['Word definitions','Audio pronunciation','Arabic translation'], repo='https://github.com/mohammed-amin20/Dictionary', note='Supplied app captures showing lookup, results, loading, and connectivity states.'),
+ dict(id='rick', folder='rick-and-morty', name='Rick & Morty', category='entertainment', label='Character explorer', color='#b4e777', logo='portal-logo.svg', title='One app.<br>A whole multiverse.', description='A character explorer with cinematic cards, live search, detailed profiles, and playful loading and empty states.', role='Android application', contribution='Clean Architecture and MVI with API-backed character browsing, Room caching, and shared-element navigation.', tags=['Kotlin','Jetpack Compose','Room','Retrofit'], features=['Character search','Rich profiles','Offline cache'], repo='https://github.com/mohammed-amin20/Rick-And-Morty', note='Supplied device captures in both themes, including character and network states.'),
 ]
 
 preview_screens = {
  'devz': ['login-content-dark.png', 'feed-content-dark.png', 'profile-content-dark.png'],
  'memo': ['notes-dark.png', 'add-edit-note-dark.png', 'hidden-notes-list-dark.png'],
  'dictionary': ['home-dark.jpeg', 'output-dark.jpeg', 'no-internet-dark.jpeg'],
- 'rick': ['home-dark.jpeg', 'search-dark.jpeg', 'detailes-dark.jpeg'],
+ 'rick': ['home-dark.jpeg', 'search-dark.jpeg', 'details-dark.jpeg'],
 }
 
 screen_flows = {
@@ -36,13 +36,10 @@ screen_flows = {
   'settings', 'settings-narrow', 'settings-logout-dialog',
  ],
  'dictionary': ['splash', 'home', 'search-loading', 'output', 'no-internet'],
- 'rick': ['splash', 'loading', 'home', 'search', 'detailes', 'failed-notfound'],
+ 'rick': ['splash', 'loading', 'home', 'search', 'details', 'failed-notfound'],
 }
 
 def screen_name(path):
- # The supplied Rick & Morty splash capture retains its original export name.
- if path.name == 'WhatsApp Image 2026-10-12 at 12.25.00 PM.jpeg':
-  return 'splash'
  return re.sub(r'-(dark|light)$', '', path.stem).replace('-content', '')
 
 def screen_order(path, project):
@@ -53,7 +50,7 @@ def screen_order(path, project):
  return position, name, theme, path.name
 
 def label(path):
- return screen_name(path).replace('detailes','details').replace('-',' ').capitalize()
+ return screen_name(path).replace('-',' ').capitalize()
 
 def image_link(p,project,cover=False):
  theme='light' if 'light' in p.stem else 'dark' if 'dark' in p.stem else 'both'
