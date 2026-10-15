@@ -6,7 +6,7 @@ Display preferences:
 Use the sun/moon button in the header to switch light and dark themes.
 Use the language button to switch English and Arabic; Arabic uses a right-to-left layout.
 Preferences are saved in the browser when local storage is available. The initial theme follows the system preference.
-All styles live in the single stylesheet styles.css, ordered as design tokens, base layout, then presentation layers and a final polish layer.
+All styles live in the single stylesheet styles.css, ordered as design tokens, base layout, then presentation layers, a final polish layer, and a motion and atmosphere layer.
 Translations, preference controls, scroll progress, and reveal animations live in experience.js.
 Animations respect the browser's reduced-motion setting. Navigation and image links work without JavaScript.
 Arabic typography uses Tajawal from Google Fonts, with Dubai and system fonts as fallbacks when the font service is unavailable.
@@ -20,6 +20,13 @@ Freelance profiles appear as brand-accented cards with staggered scroll reveals 
 Get in touch includes Facebook and Instagram profile cards alongside email and WhatsApp. Social icons are inline SVGs, links open profiles in a new tab, and labels support English and Arabic. Facebook and Instagram are also available in the footer.
 When changing English page text or generated project metadata, update the matching Arabic translation in experience.js.
 Screenshot walkthrough order is defined per application in screen_flows in tools/build_showcase.py. Galleries start with launch/authentication and progress through features and final states, keeping dark/light variants together. Separate preview_screens selections show three varied screens that illustrate each app's features.
+
+Atmosphere and motion:
+The fixed background adds two slowly drifting aurora glows, a faint film-grain texture, and a soft light that follows the cursor on desktop.
+A small corner constellation draws itself once on load and then twinkles; the orbital shapes drift as the page scrolls using scroll-driven animation, with a JavaScript fallback for browsers that lack it.
+Hero headlines rise into view and the accent phrase shimmers.
+Featured project, platform, and certificate cards reveal a rotating accent ring on hover, project covers tilt gently in 3D, and the technology strip runs as a seamless marquee that pauses on hover or keyboard focus.
+Legibility is preserved in both themes, and every effect is switched off by reduced motion. All content and image links remain visible without JavaScript.
 
 Deploy to Netlify:
 1. Extract this ZIP into a folder.

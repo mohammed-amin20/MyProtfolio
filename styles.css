@@ -991,3 +991,144 @@ footer .foot{position:relative;z-index:1}
  dialog[open],dialog::backdrop{animation:none!important}
  .navlinks a:not(.navcontact):hover:after,.navlinks a:not(.navcontact)[aria-current]:after{transform:scaleX(1)}
 }
+
+/* ============================================================================
+   5 / MOTION & ATMOSPHERE
+   Living background (aurora, grain, cursor light, constellation), hero
+   headline motion, aurora card borders, 3D tilt and the tech marquee.
+   Everything is transform/opacity only and inherits the global
+   prefers-reduced-motion reset near the top of the experience layer.
+   ========================================================================== */
+
+/* Aurora field, grain and cursor light -------------------------------------- */
+@property --glow-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+
+.ambient-background{--aurora-speed:1}
+
+.ambient-background:before,.ambient-background:after{content:'';position:absolute;width:min(78vw,860px);aspect-ratio:1;border-radius:50%;filter:blur(10px);translate:0 0}
+
+.ambient-background:before{top:-26%;inset-inline-start:-16%;background:radial-gradient(circle,color-mix(in srgb,var(--lime) 26%,transparent),transparent 66%);animation:aurora-drift-a calc(58s * var(--aurora-speed)) ease-in-out infinite alternate}
+
+.ambient-background:after{inset-inline-end:-20%;bottom:-30%;background:radial-gradient(circle,color-mix(in srgb,var(--mint) 22%,transparent),transparent 66%);animation:aurora-drift-b calc(74s * var(--aurora-speed)) ease-in-out infinite alternate}
+
+@keyframes aurora-drift-a{from{translate:-4% -3%;scale:.94}
+to{translate:9% 7%;scale:1.12}
+}
+
+@keyframes aurora-drift-b{from{translate:6% 4%;scale:1.08}
+to{translate:-8% -6%;scale:.92}
+}
+
+.ambient-fx{position:absolute;inset:0}
+
+.ambient-fx:before{content:'';position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px}
+
+.ambient-fx:after{content:'';position:absolute;inset:0;opacity:0;background:radial-gradient(420px circle at var(--spot-x,50%) var(--spot-y,30%),color-mix(in srgb,var(--lime) 9%,transparent),transparent 70%);transition:opacity .6s ease}
+
+.ambient-fx.is-tracking:after{opacity:1}
+
+[data-theme=light] .ambient-background:before{background:radial-gradient(circle,color-mix(in srgb,var(--lime) 15%,transparent),transparent 66%)}
+
+[data-theme=light] .ambient-background:after{background:radial-gradient(circle,color-mix(in srgb,var(--mint) 14%,transparent),transparent 66%)}
+
+[data-theme=light] .ambient-fx:before{opacity:.025}
+
+[data-theme=light] .ambient-fx:after{background:radial-gradient(420px circle at var(--spot-x,50%) var(--spot-y,30%),color-mix(in srgb,var(--lime) 8%,transparent),transparent 70%)}
+
+/* Constellation: drawn once on load, then quietly alive ---------------------- */
+.ambient-constellation path{stroke-dasharray:var(--line-length,none);stroke-dashoffset:var(--line-length,0)}
+
+.ambient-constellation.is-drawn path{animation:constellation-draw 3.4s cubic-bezier(.4,0,.2,1) forwards}
+
+@keyframes constellation-draw{to{stroke-dashoffset:0}
+}
+
+.ambient-constellation circle{animation:star-twinkle 5.4s ease-in-out infinite;animation-delay:calc(var(--star-delay,0) * 1s)}
+
+.ambient-constellation circle:nth-child(2n){--star-delay:.9}
+.ambient-constellation circle:nth-child(3n){--star-delay:1.7}
+.ambient-constellation circle:nth-child(3n+1){--star-delay:2.6}
+.ambient-constellation circle:nth-child(5n){--star-delay:3.4}
+
+@keyframes star-twinkle{0%,100%{opacity:.35}
+50%{opacity:1}
+}
+
+/* Scroll-linked parallax keeps the geometry from feeling like wallpaper ------ */
+@supports(animation-timeline:scroll()){
+ .background-orbit.orbit-left{animation:parallax-deep linear both;animation-timeline:scroll(root);animation-range:0 100%}
+ .background-orbit.orbit-right{animation:parallax-shallow linear both;animation-timeline:scroll(root);animation-range:0 100%}
+ .ambient-background:before{animation:aurora-drift-a calc(58s * var(--aurora-speed)) ease-in-out infinite alternate,parallax-rise-deep linear both;animation-timeline:auto,scroll(root);animation-range:normal,0 100%}
+ .ambient-background:after{animation:aurora-drift-b calc(74s * var(--aurora-speed)) ease-in-out infinite alternate,parallax-rise-shallow linear both;animation-timeline:auto,scroll(root);animation-range:normal,0 100%}
+}
+
+@keyframes parallax-deep{to{translate:0 -150px}
+}
+
+@keyframes parallax-shallow{to{translate:0 -80px}
+}
+
+/* The aurora keeps its own translate drift, so its parallax uses transform. */
+@keyframes parallax-rise-deep{to{transform:translateY(-120px)}
+}
+
+@keyframes parallax-rise-shallow{to{transform:translateY(-60px)}
+}
+
+/* Hero headline motion ----------------------------------------------------- */
+.hero h1{animation:headline-in .95s cubic-bezier(.2,.8,.2,1) both;animation-delay:.08s}
+
+@keyframes headline-in{from{opacity:0;clip-path:inset(0 0 100% 0);transform:translateY(20px)}
+to{opacity:1;clip-path:inset(0 0 -12% 0);transform:none}
+}
+
+.hero h1 em{background-size:220% 100%;animation:title-shimmer 7s ease-in-out infinite alternate}
+
+@keyframes title-shimmer{from{background-position:0% 50%}
+to{background-position:100% 50%}
+}
+
+/* Aurora border on featured cards (hover only) ----------------------------- */
+.project-card,.platform-card,.certificate-card{position:relative}
+
+.project-card:after,.platform-card:after,.certificate-card:after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:conic-gradient(from var(--glow-angle),transparent 0deg,color-mix(in srgb,var(--glow-color,var(--lime)) 72%,transparent) 70deg,transparent 165deg,color-mix(in srgb,var(--mint) 55%,transparent) 250deg,transparent 340deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:0;transition:opacity .45s ease;pointer-events:none;z-index:2}
+
+.project-card{--glow-color:var(--project-accent)}
+
+@media(hover:hover) and (pointer:fine){
+ .project-card:hover:after,.platform-card:hover:after,.certificate-card:hover:after,.project-card:focus-within:after,.platform-card:focus-visible:after,.certificate-card:focus-within:after{opacity:1;animation:glow-rotate 7s linear infinite}
+}
+
+@keyframes glow-rotate{to{--glow-angle:360deg}
+}
+
+/* 3D tilt stage ------------------------------------------------------------ */
+.project-layout{perspective:1100px}
+
+.project-cover{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .3s}
+
+.project-cover.is-tilting{transition:transform .12s linear}
+
+/* Tech marquee ------------------------------------------------------------- */
+.techs.is-marquee{display:flex;flex-wrap:nowrap;justify-content:flex-start;gap:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+
+.techs.is-marquee .techs-track{display:flex;flex:0 0 auto;align-items:center;gap:18px;padding-inline-end:18px;animation:marquee-slide var(--marquee-duration,26s) linear infinite}
+
+.techs.is-marquee:hover .techs-track,.techs.is-marquee:focus-within .techs-track{animation-play-state:paused}
+
+@keyframes marquee-slide{to{transform:translateX(-100%)}
+}
+
+/* Mobile trims ------------------------------------------------------------- */
+@media(max-width:700px){
+ .ambient-background:before,.ambient-background:after{filter:blur(6px)}
+ .ambient-fx:before{opacity:.03}
+ .ambient-fx:after{background:radial-gradient(300px circle at 50% 20%,color-mix(in srgb,var(--lime) 7%,transparent),transparent 70%)}
+ .project-cover{transform:none!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .ambient-background:before,.ambient-background:after,.ambient-constellation,.ambient-constellation circle,.ambient-constellation path,.hero h1,.hero h1 em,.project-card:after,.platform-card:after,.certificate-card:after,.techs.is-marquee .techs-track{animation:none!important}
+ .ambient-constellation path{stroke-dasharray:none;stroke-dashoffset:0}
+ .ambient-fx:after{display:none}
+}

@@ -262,4 +262,80 @@
     }), { threshold: .6 });
     counters.forEach(counter => countObserver.observe(counter));
   }
+  const constellation = document.querySelector('.ambient-constellation');
+  if (constellation && !motion.matches) {
+    constellation.querySelectorAll('path').forEach(path => {
+      const length = path.getTotalLength();
+      if (!length) return;
+      path.style.setProperty('--line-length', length.toFixed(1));
+    });
+    constellation.classList.add('is-drawn');
+  }
+  if (!(CSS.supports && CSS.supports('animation-timeline: scroll()')) && !motion.matches) {
+    const layers = [[document.querySelector('.background-orbit.orbit-left'), -.16], [document.querySelector('.background-orbit.orbit-right'), -.09]].filter(pair => pair[0]);
+    if (layers.length) {
+      let parallaxFrame = 0;
+      const updateParallax = () => {
+        parallaxFrame = 0;
+        const shift = scrollY;
+        layers.forEach(([layer, factor]) => { layer.style.translate = `0 ${(shift * factor).toFixed(1)}px`; });
+      };
+      addEventListener('scroll', () => { if (!parallaxFrame) parallaxFrame = requestAnimationFrame(updateParallax); }, { passive:true });
+      updateParallax();
+    }
+  }
+  const ambientFx = document.querySelector('.ambient-fx');
+  if (ambientFx && finePointer.matches && !motion.matches) {
+    let targetX = innerWidth / 2, targetY = innerHeight * .3, currentX = targetX, currentY = innerHeight * -1, spotFrame = 0;
+    const paintSpot = () => {
+      spotFrame = 0;
+      currentX += (targetX - currentX) * .085;
+      currentY += (targetY - currentY) * .085;
+      ambientFx.style.setProperty('--spot-x', currentX.toFixed(1) + 'px');
+      ambientFx.style.setProperty('--spot-y', currentY.toFixed(1) + 'px');
+      if (Math.abs(targetX - currentX) > .6 || Math.abs(targetY - currentY) > .6) spotFrame = requestAnimationFrame(paintSpot);
+    };
+    addEventListener('pointermove', event => {
+      targetX = event.clientX; targetY = event.clientY;
+      if (!ambientFx.classList.contains('is-tracking')) ambientFx.classList.add('is-tracking');
+      if (!spotFrame) spotFrame = requestAnimationFrame(paintSpot);
+    }, { passive:true });
+    const hideSpot = () => ambientFx.classList.remove('is-tracking');
+    addEventListener('pointerleave', hideSpot);
+    addEventListener('blur', hideSpot);
+  }
+  if (finePointer.matches && !motion.matches) {
+    document.querySelectorAll('.project-cover').forEach(cover => {
+      cover.addEventListener('pointermove', event => {
+        const bounds = cover.getBoundingClientRect();
+        const x = (event.clientX - bounds.left) / bounds.width;
+        const y = (event.clientY - bounds.top) / bounds.height;
+        cover.classList.add('is-tilting');
+        cover.style.transform = `rotateY(${((x - .5) * 11).toFixed(2)}deg) rotateX(${((.5 - y) * 11).toFixed(2)}deg)`;
+      });
+      cover.addEventListener('pointerleave', () => {
+        cover.classList.remove('is-tilting');
+        cover.style.removeProperty('transform');
+      });
+    });
+  }
+  const techs = document.querySelector('.techs');
+  if (techs && !motion.matches && techs.children.length) {
+    const items = [...techs.children];
+    const track = document.createElement('div');
+    track.className = 'techs-track';
+    track.append(...items);
+    techs.append(track);
+    techs.classList.add('is-marquee');
+    let guard = 0;
+    while (track.getBoundingClientRect().width < techs.clientWidth * 1.25 && guard < 6) {
+      items.forEach(item => track.append(item.cloneNode(true)));
+      guard += 1;
+    }
+    const width = track.getBoundingClientRect().width;
+    if (width) techs.style.setProperty('--marquee-duration', Math.max(18, Math.round(width / 62)) + 's');
+    const echo = track.cloneNode(true);
+    echo.setAttribute('aria-hidden', 'true');
+    techs.append(echo);
+  }
 })();
