@@ -54,8 +54,8 @@ def label(path):
 
 def image_link(p,project,cover=False):
  theme='light' if 'light' in p.stem else 'dark' if 'dark' in p.stem else 'both'
- url=quote(p.as_posix(),safe='/'); caption=label(p)
- return f'<figure class="screen" data-theme="{theme}"><a class="screenshot-link" href="{url}" data-project="{project["id"]}" data-theme="{theme}" data-caption="{escape(caption)}" aria-label="Enlarge {escape(project["name"])} {escape(caption)}"><img src="{url}" alt="{escape(project["name"])}: {escape(caption)}, {theme} theme" loading="lazy" decoding="async" width="411" height="891"></a><figcaption>{escape(caption)}</figcaption></figure>'
+ url=quote(p.as_posix(),safe='/'); webp=quote(p.with_suffix('.webp').as_posix(),safe='/'); caption=label(p)
+ return f'<figure class="screen" data-theme="{theme}"><a class="screenshot-link" href="{webp}" data-project="{project["id"]}" data-theme="{theme}" data-caption="{escape(caption)}" aria-label="Enlarge {escape(project["name"])} {escape(caption)}"><picture><source type="image/webp" srcset="{webp}"><img src="{url}" alt="{escape(project["name"])}: {escape(caption)}, {theme} theme" loading="lazy" decoding="async" width="411" height="891"></picture></a><figcaption>{escape(caption)}</figcaption></figure>'
 
 cards=[]
 for number,p in enumerate(projects,1):
@@ -66,7 +66,13 @@ for number,p in enumerate(projects,1):
  for image in primary:
   if image not in images:
    raise ValueError(f'Missing preview screenshot: {image}')
- icon=f'<img src="{quote((folder/p["logo"]).as_posix(),safe="/")}" alt="" width="44" height="44" loading="lazy">' if p['logo'] else '<span class="memo-icon" aria-hidden="true">m.</span>'
+ logo_src=quote((folder/p["logo"]).as_posix(),safe="/")
+ if p['logo'].endswith('.svg'):
+  icon=f'<img src="{logo_src}" alt="" width="44" height="44" loading="lazy">'
+ elif p['logo']:
+  icon=f'<picture><source type="image/webp" srcset="{quote((folder/p["logo"]).with_suffix(".webp").as_posix(),safe="/")}"><img src="{logo_src}" alt="" width="44" height="44" loading="lazy"></picture>'
+ else:
+  icon='<span class="memo-icon" aria-hidden="true">m.</span>'
  repo=f'<a class="project-source" href="{p["repo"]}" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a>' if p['repo'] else ''
  cards.append(f'''<article class="project-card" id="project-{p['id']}" data-category="{p['category']}" data-project="{p['id']}" data-name="{escape(p['name'])}" style="--project-accent:{p['color']}">
  <div class="project-intro"><div class="project-brand">{icon}<div><span class="project-category">{p['label']}</span><h3>{escape(p['name'])}</h3></div><span class="project-number">0{number}</span></div>

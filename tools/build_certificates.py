@@ -22,16 +22,18 @@ for number, (folder, title, category, hours, description, credential_id) in enum
     english = next(p for p in artwork if p.name.isascii())
     arabic = next(p for p in artwork if not p.name.isascii())
     url = lambda p: quote(p.relative_to(ROOT).as_posix(), safe='/')
+    webp = lambda p: url(p.with_suffix('.webp'))
     verify = re.search(r'https://\S+', next(source.glob('*.txt')).read_text(encoding='utf-8')).group()
     cards.append(f'''<article class="certificate-card">
 <div class="certificate-card-top"><span class="certificate-category">{category}</span><span class="certificate-number" data-certificate-number="{number}" aria-hidden="true">0{number}</span></div>
-<a class="certificate-art" href="{url(english)}" data-en="{url(english)}" data-ar="{url(arabic)}" aria-haspopup="dialog"><img src="{url(english)}" alt="{escape(title)}" width="1080" height="1080" loading="lazy" decoding="async"><span class="certificate-preview"><span>View certificate</span> {arrow}</span></a>
+<a class="certificate-art" href="{webp(english)}" data-en="{webp(english)}" data-ar="{webp(arabic)}" aria-haspopup="dialog"><picture><source type="image/webp" srcset="{webp(english)}"><img src="{url(english)}" alt="{escape(title)}" width="1080" height="1080" loading="lazy" decoding="async"></picture><span class="certificate-preview"><span>View certificate</span> {arrow}</span></a>
 <div class="certificate-copy"><div class="certificate-meta"><span>Avatar</span><span data-certificate-hours="{hours}">{hours} training hours</span></div><h3>{escape(title)}</h3><p>{escape(description)}</p><div class="certificate-issued"><span>Issued October 2026</span><code dir="ltr" lang="en">{credential_id}</code></div><a class="certificate-verify" href="{verify}" target="_blank" rel="noopener noreferrer">{seal}<span>Verify credential</span>{arrow}</a></div>
 </article>''')
+total_hours = sum(hours for *_, hours, _, _ in credentials)
 section = f'''<!-- certificates:start -->
 <section id="certificates" class="section certificates" aria-labelledby="certificates-title">
 <div class="sectionhead" data-section="03 / CERTIFICATES"><div><div class="eyebrow">Always building. Always learning.</div><h2 id="certificates-title">More knowledge.<br><span>More possibilities.</span></h2></div><p>Continuing to grow beyond the code, from professional identity to smarter workflows and independent work.</p></div>
-<div class="certificate-summary"><span class="certificate-summary-icon">{seal}</span><div><strong>Learning, documented.</strong><span>Certificates of attendance · Avatar</span></div><div class="certificate-total"><strong data-certificate-number="3">03</strong><span>certificates</span></div><div class="certificate-total"><strong data-certificate-number="90">90</strong><span data-certificate-hours-unit>training hours</span></div></div>
+<div class="certificate-summary"><span class="certificate-summary-icon">{seal}</span><div><strong>Learning, documented.</strong><span>Certificates of attendance · Avatar</span></div><div class="certificate-total"><strong data-certificate-number="{len(credentials)}">0{len(credentials)}</strong><span>certificates</span></div><div class="certificate-total"><strong data-certificate-number="{total_hours}">{total_hours}</strong><span data-certificate-hours-unit>training hours</span></div></div>
 <div class="certificate-grid">{''.join(cards)}</div>
 </section>
 <!-- certificates:end -->'''
