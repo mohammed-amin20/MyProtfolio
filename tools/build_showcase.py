@@ -84,7 +84,6 @@ work=f'''<section id="work" class="section showcase"><div class="sectionhead" da
 path=Path('index.html'); html=path.read_text(encoding='utf-8')
 start=html.index('<section id="work"'); end=html.index('<section id="services"')
 html=html[:start]+work+'\n'+html[end:]
-if 'showcase.css' not in html: html=html.replace('<link rel="stylesheet" href="identity.css">','<link rel="stylesheet" href="identity.css">\n<link rel="stylesheet" href="showcase.css">')
 html=html.replace('Your next idea.<br>A mobile app<br><em>built with care.</em>','Good ideas deserve<br><em>great mobile apps.</em>')
 html=html.replace("I'm Mohammed. I turn ideas and designs into practical mobile experiences, from the first interface to the features your users need next.","I'm Mohammed, an Android &amp; Flutter developer. I build thoughtful interfaces and reliable mobile experiences — from the first sketch to the next release.")
 # Preserve the preference bootstrap and external interaction scripts.
