@@ -239,4 +239,27 @@
   };
   addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(updateProgress); } }, { passive:true });
   addEventListener('resize', updateProgress); updateProgress();
+  const counters = [...document.querySelectorAll('[data-count]')];
+  const runCounter = element => {
+    const target = Number(element.dataset.count) || 0;
+    const suffix = element.dataset.suffix || '';
+    const duration = 1100;
+    const started = performance.now();
+    const tick = now => {
+      const progress = Math.min(1, (now - started) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      element.textContent = Math.round(target * eased) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+      else element.textContent = target + suffix;
+    };
+    requestAnimationFrame(tick);
+  };
+  if (counters.length && !motion.matches && 'IntersectionObserver' in window) {
+    const countObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      countObserver.unobserve(entry.target);
+      runCounter(entry.target);
+    }), { threshold: .6 });
+    counters.forEach(counter => countObserver.observe(counter));
+  }
 })();

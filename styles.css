@@ -931,3 +931,63 @@ main{overflow:clip}
 
 @media(prefers-reduced-motion:reduce){.certificate-art:hover img,.certificate-verify:hover>span:last-child{transform:none}
 }
+
+/* ============================================================================
+   4 / PRESENTATION POLISH
+   Refinement layer appended last so it wins the cascade: header, navigation,
+   buttons, stats, project media, dialogs and footer.
+   ========================================================================== */
+
+/* Header & navigation ------------------------------------------------------ */
+header{background:color-mix(in srgb,var(--bg) 76%,transparent);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%)}
+.navlinks a:not(.navcontact){position:relative}
+.navlinks a:not(.navcontact):after{content:'';position:absolute;inset-inline:0;bottom:4px;height:2px;border-radius:2px;background:var(--lime);transform:scaleX(0);transform-origin:center;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.navlinks a:not(.navcontact):hover:after,.navlinks a:not(.navcontact)[aria-current]:after{transform:scaleX(1)}
+
+/* Buttons ------------------------------------------------------------------ */
+.button{transition:background-color .2s,border-color .2s,transform .2s,box-shadow .25s,background-position .55s ease}
+.button.primary,.button.primary:hover{background-color:var(--lime);background-image:linear-gradient(110deg,var(--lime) 0%,var(--lime) 38%,color-mix(in srgb,#fff 62%,var(--lime)) 48%,var(--lime) 58%,var(--lime) 100%);background-size:280% 100%;border-color:transparent}
+.button.primary{background-position:100% 0;box-shadow:0 16px 34px -18px color-mix(in srgb,var(--lime) 85%,transparent),inset 0 1px 0 rgba(255,255,255,.4)}
+.button.primary:hover{background-position:0 0;transform:translateY(-2px);box-shadow:0 22px 44px -20px color-mix(in srgb,var(--lime) 90%,transparent)}
+.button:not(.primary):hover{box-shadow:0 14px 30px -20px color-mix(in srgb,var(--lime) 85%,transparent)}
+.resume-link{transition:color .2s,letter-spacing .25s}
+.resume-link:hover{letter-spacing:.4px}
+
+/* Hero portrait & stats ---------------------------------------------------- */
+.portrait{box-shadow:0 44px 84px -46px #000b,0 0 0 1px color-mix(in srgb,var(--lime) 12%,transparent)}
+.portrait figcaption{border-top:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--soft) 60%,transparent),transparent)}
+.portrait figcaption strong{transition:color .25s}
+.portrait:hover figcaption strong{color:var(--lime)}
+.stat strong{font-variant-numeric:tabular-nums;font-feature-settings:'tnum';transition:color .3s}
+.stat:hover strong{color:var(--mint)}
+.techs span{transition:color .25s}
+.techs span:hover{color:var(--lime)}
+
+/* Project cards & device frames -------------------------------------------- */
+@media(hover:hover){.project-card:hover{border-color:color-mix(in srgb,var(--project-accent) 55%,var(--line));box-shadow:0 34px 70px -34px color-mix(in srgb,var(--project-accent) 55%,transparent),var(--shadow)}}
+.screen .screenshot-link{box-shadow:0 14px 22px #0005,inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1px rgba(255,255,255,.05)}
+.sectionhead:after{letter-spacing:1.5px}
+
+/* Dialogs (image viewer & certificates) ------------------------------------ */
+dialog{border-radius:var(--radius-lg);box-shadow:0 50px 120px -40px #000d,0 0 90px -56px var(--lime),0 0 0 1px color-mix(in srgb,var(--lime) 22%,transparent)}
+dialog::backdrop{background:rgba(9,9,15,.7);backdrop-filter:blur(16px) saturate(125%);-webkit-backdrop-filter:blur(16px) saturate(125%);animation:backdrop-in .25s ease}
+dialog[open]{animation:dialog-in .3s cubic-bezier(.16,1,.3,1)}
+@keyframes dialog-in{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes backdrop-in{from{opacity:0}to{opacity:1}}
+.viewer-image,.certificate-dialog-image{border-radius:14px}
+.viewer-top button,.viewer-controls button{transition:background-color .2s,border-color .2s,color .2s,transform .2s,box-shadow .25s;box-shadow:0 10px 22px -16px #000}
+.viewer-top button:hover,.viewer-controls button:hover{background:color-mix(in srgb,var(--lime) 12%,var(--panel));color:var(--lime)}
+#viewer-count,.certificate-position{font-variant-numeric:tabular-nums;letter-spacing:.6px}
+
+/* Footer ------------------------------------------------------------------- */
+footer{position:relative;isolation:isolate;overflow:hidden}
+footer:before{content:'';position:absolute;top:-60px;left:50%;width:min(760px,92%);height:170px;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--lime) 15%,transparent),transparent 70%);pointer-events:none;z-index:-1}
+footer .foot{position:relative;z-index:1}
+
+/* Motion safety ------------------------------------------------------------ */
+@media(prefers-reduced-motion:reduce){
+ .button,.button.primary,.resume-link,.stat strong,.techs span,.portrait figcaption strong,
+ .navlinks a:not(.navcontact):after,.viewer-top button,.viewer-controls button{transition:none!important}
+ dialog[open],dialog::backdrop{animation:none!important}
+ .navlinks a:not(.navcontact):hover:after,.navlinks a:not(.navcontact)[aria-current]:after{transform:scaleX(1)}
+}

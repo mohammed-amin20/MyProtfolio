@@ -2,15 +2,17 @@
 
 ## Project Structure & Module Organization
 
-This repository is a static developer portfolio built with HTML, CSS, and vanilla JavaScript. `index.html` contains the page content; `portfolio.js` implements navigation, project filters, theme filters, and the screenshot viewer. Styles load in order: `styles.css` for the base layout, `identity.css` for branding, and `showcase.css` for project galleries.
+This repository is a static developer portfolio built with HTML, CSS, and vanilla JavaScript. `index.html` contains the page content; `portfolio.js` implements navigation, project filters, theme filters, and the screenshot viewer; `experience.js` holds the translation table, theme/language preferences, scroll progress, reveals, and counters; `certificates.js` drives the certificate dialog. All styling lives in the single `styles.css`, ordered as design tokens, base layout, then presentation layers (identity, showcase, experience, certificates) and a final polish layer appended last.
 
-`assets/` holds logos, the portrait, CV, and screenshots grouped under `devz/`, `memo/`, `Dictionary/`, and `rick&morty/`. `tools/build_showcase.py` generates the project showcase inside `index.html`. Root preview images are visual references. There is no application backend or dedicated test directory.
+`assets/` holds logos, the portrait, CV, WebP derivatives, and screenshots grouped under `devz/`, `memo/`, `dictionary/`, and `rick-and-morty/`. `tools/build_showcase.py` generates the work section inside `index.html` and `tools/build_certificates.py` generates the certificate section; `tools/optimize_assets.py` rebuilds the WebP derivatives. `robots.txt`, `sitemap.xml`, and the social preview `assets/og-image.png` are served from the repository root. There is no application backend or dedicated test directory.
 
 ## Build, Test, and Development Commands
 
 - `Start-Process ./index.html`: open the portfolio directly in the default browser on Windows.
 - `python -m http.server 8000`: serve the repository locally; visit `http://localhost:8000`.
-- `python tools/build_showcase.py`: regenerate the showcase from project metadata and assets. Run from the repository root; this rewrites part of `index.html`, so review the resulting changes.
+- `python tools/build_showcase.py`: regenerate the work section from project metadata and assets. Run from the repository root; this rewrites part of `index.html`, so review the resulting changes.
+- `python tools/build_certificates.py`: regenerate the certificate section from the metadata in that script.
+- `python tools/optimize_assets.py`: rebuild the WebP derivatives for screenshots, certificates, logos, and the profile portrait.
 
 No dependency installation or production build is required. Deployment uses the static files directly, as described in `README.txt`.
 
