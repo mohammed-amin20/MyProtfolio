@@ -111,7 +111,7 @@
   window.portfolioResults = count => root.lang === 'ar' ? `${count} مشاريع` : `${count} project${count === 1 ? '' : 's'}`;
   const textNodes = [];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-    acceptNode: node => node.parentElement.closest('script,style,noscript,.preferences,#project-results,#viewer-count,#viewer-title') || !node.textContent.trim() ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+    acceptNode: node => node.parentElement.closest('script,style,noscript,.preferences,.living-code,#project-results,#viewer-count,#viewer-title') || !node.textContent.trim() ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
   });
   while (walker.nextNode()) textNodes.push([walker.currentNode, walker.currentNode.textContent]);
   const attributes = [];

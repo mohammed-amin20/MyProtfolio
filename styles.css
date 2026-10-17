@@ -1132,3 +1132,87 @@ to{background-position:100% 50%}
  .ambient-constellation path{stroke-dasharray:none;stroke-dashoffset:0}
  .ambient-fx:after{display:none}
 }
+/* Hero living code: clipped decoration, independent of content and direction. */
+.hero .living-code{position:absolute;inset:0 -48px;z-index:-1;overflow:hidden;pointer-events:none;user-select:none;animation:none;direction:ltr;--code-ink:var(--ink);--code-warm:#c8bba5;background:var(--bg);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent),linear-gradient(transparent,#000 5%,#000 94%,transparent);mask-composite:intersect}
+.hero:has(.living-code):before,.hero:has(.living-code) .hero-sculpture{display:none}
+.code-glows{position:absolute;inset:0;background:var(--bg)}
+.code-glows:before,.code-glows:after{content:'';position:absolute;inset:-12%;background:radial-gradient(ellipse at 12% 23%,color-mix(in srgb,var(--lime) 21%,transparent),transparent 52%);filter:blur(32px);animation:code-haze 32s ease-in-out infinite alternate;animation-play-state:paused}
+.code-glows:after{background:radial-gradient(ellipse at 88% 76%,color-mix(in srgb,var(--mint) 14%,transparent),transparent 52%);animation-duration:43s;animation-direction:alternate-reverse}
+.code-field{position:absolute;inset:0;mask-image:radial-gradient(ellipse 27% 38% at 28% 47%,transparent 70%,#000 165%),linear-gradient(#0000,#000 14%,#000 84%,#0000);mask-composite:intersect}
+.is-enhanced .code-field{animation:code-arrive 3.2s ease-out both;animation-play-state:paused}
+.code-field:after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 25% 42% at 77% 48%,var(--bg) 68%,transparent 145%)}
+.code-depth{position:absolute;inset:0}
+.code-pane{--code-opacity:.3;--code-reveal:.15;position:absolute;width:360px;color:var(--code-ink);opacity:calc(var(--code-opacity) + var(--code-hover,0) * var(--code-reveal));font:12px/1.95 var(--font-mono);text-align:left;direction:ltr;unicode-bidi:isolate;white-space:pre;border:1px solid color-mix(in srgb,var(--lime) 16%,transparent);border-radius:10px;background:linear-gradient(135deg,color-mix(in srgb,var(--panel) 65%,transparent),transparent 90%);overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 87%,transparent),linear-gradient(#000 75%,transparent);mask-composite:intersect;transition:opacity 1.8s cubic-bezier(.22,1,.36,1)}
+/* Frost only the outer lines: the middle stays crisp and readable.
+   Crossfade the fixed blur on hover instead of animating a costly filter. */
+.code-pane:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px);background:color-mix(in srgb,var(--bg) 8%,transparent);mask-image:linear-gradient(#000,transparent 25%,transparent 58%,#000),linear-gradient(90deg,#000,transparent 22%,transparent 78%,#000);mask-composite:add;opacity:calc(.95 - var(--code-hover,0) * .7);transition:opacity 2s cubic-bezier(.22,1,.36,1)}
+.code-tab{height:29px;padding:3px 15px;border-bottom:1px solid color-mix(in srgb,var(--lime) 22%,transparent);font-size:10px;color:var(--lime);letter-spacing:.3px}
+.code-window{height:210px;overflow:hidden;position:relative;mask-image:linear-gradient(transparent,#000 9%,#000 80%,transparent)}
+.code-scroll{animation:code-drift 125s linear infinite;animation-play-state:paused}
+.code-snippet{height:260px;padding:12px 0;background:repeating-linear-gradient(90deg,transparent 0 23px,color-mix(in srgb,var(--lime) 14%,transparent) 23px 24px);background-size:96px 100%;background-position:48px 0;background-repeat:no-repeat}
+.code-line{display:flex;height:23.4px}
+.code-line i{width:40px;flex-shrink:0;text-align:right;padding-right:12px;font-style:normal;color:color-mix(in srgb,var(--muted) 55%,transparent);font-size:10px}
+.code-keyword{color:var(--lime)}
+.code-type{color:color-mix(in srgb,var(--lime) 65%,var(--mint))}
+.code-string{color:var(--code-warm)}
+.code-compose{top:18px;inset-inline-start:-30px}
+.code-viewmodel{top:5px;inset-inline-end:-35px}
+.code-viewmodel .code-scroll{animation-delay:-31s;animation-duration:145s}
+.code-contract{bottom:-45px;inset-inline-start:12%;width:420px}
+.code-flutter{bottom:-35px;inset-inline-end:-42px;width:390px}
+.code-flutter .code-scroll{animation-delay:-48s;animation-duration:138s}
+.code-contract .code-scroll{animation-delay:-17s}
+.code-far{--code-opacity:.13;--code-reveal:.05;font-size:16px;filter:blur(1.4px);width:510px;border:0;background:none;transform:translate3d(calc(var(--code-x,0px) * -.65),calc(var(--code-y,0px) * -.65),0)}
+.code-far:after{display:none}
+.code-far .code-scroll{animation-duration:175s;animation-direction:reverse}
+.code-dao{top:36%;inset-inline-start:-140px}
+.code-repository{top:35%;inset-inline-end:-190px}
+.code-terminal{bottom:4px;inset-inline-start:-24px;width:340px;--code-opacity:.3}
+.code-terminal pre{margin:0;padding:14px 20px;height:215px;font:inherit;line-height:1.8;color:var(--mint);opacity:1;transition:opacity 1.6s ease}
+.is-resetting .code-terminal pre{opacity:0}
+.code-terminal code{font:inherit}
+.code-cursor{color:var(--lime);animation:code-blink 4s ease-in-out infinite;animation-play-state:paused}
+.code-viewmodel .code-window:before{content:'';position:absolute;inset:0 0 auto;height:24px;background:color-mix(in srgb,var(--lime) 12%,transparent);animation:code-current-line 65s ease-in-out infinite alternate;animation-play-state:paused}
+.code-viewmodel .code-window:after{content:'';position:absolute;inset:8px 5px 8px auto;width:11px;opacity:.25;background:repeating-linear-gradient(0deg,var(--lime) 0 1px,transparent 1px 5px);mask-image:linear-gradient(#000,transparent)}
+.code-spot{position:absolute;top:0;left:0;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--lime) 8%,transparent),color-mix(in srgb,var(--lime) 3%,transparent) 35%,transparent 72%);opacity:0;transition:opacity 1.8s ease}
+.is-pointing .code-spot{opacity:1}
+.is-running .code-scroll,.is-running .code-cursor,.is-running .code-viewmodel .code-window:before,.is-running .code-glows:before,.is-running .code-glows:after,.is-running .code-field{animation-play-state:running}
+[dir=rtl] .living-code .code-depth{direction:rtl}
+[dir=rtl] .code-compose{left:auto;right:-30px}
+[dir=rtl] .code-viewmodel{right:auto;left:-35px}
+[dir=rtl] .code-contract{left:auto;right:12%}
+[dir=rtl] .code-flutter{right:auto;left:-42px}
+[dir=rtl] .code-dao{left:auto;right:-140px}
+[dir=rtl] .code-repository{right:auto;left:-190px}
+[dir=rtl] .code-terminal{left:auto;right:-24px}
+[dir=rtl] .code-field{mask-image:radial-gradient(ellipse 27% 38% at 72% 47%,transparent 70%,#000 165%),linear-gradient(#0000,#000 14%,#000 84%,#0000)}
+[dir=rtl] .code-field:after{background:radial-gradient(ellipse 25% 42% at 23% 48%,var(--bg) 68%,transparent 145%)}
+[data-theme=light] .living-code{--code-warm:#756040}
+@keyframes code-drift{to{transform:translateY(-50%)}}
+@keyframes code-current-line{to{transform:translateY(175px)}}
+@keyframes code-blink{0%,100%{opacity:.25}50%{opacity:.9}}
+@keyframes code-arrive{from{opacity:0}to{opacity:1}}
+@keyframes code-haze{from{opacity:.65;transform:translate3d(-1%,-1%,0) scale(.98)}to{opacity:1;transform:translate3d(2%,1.5%,0) scale(1.04)}}
+@media(max-width:700px){
+ .hero .living-code{inset:0 -24px}
+ .code-pane{width:290px;font-size:12px;--code-opacity:.23;--code-reveal:0}
+ .code-pane:after{backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px)}
+ .code-glows:before,.code-glows:after{filter:blur(20px)}
+ .code-tab,.code-viewmodel .code-window:after,.code-far,.code-contract{display:none}
+ .code-compose{top:-70px;inset-inline-start:-100px}
+ .code-viewmodel{top:38%;inset-inline-end:-145px}
+ .code-flutter{bottom:9%;inset-inline-end:-150px}
+ .code-terminal{bottom:0;inset-inline-start:-35px}
+ [dir=rtl] .code-compose{left:auto;right:-100px}
+ [dir=rtl] .code-viewmodel{right:auto;left:-145px}
+ [dir=rtl] .code-flutter{right:auto;left:-150px}
+ [dir=rtl] .code-terminal{left:auto;right:-35px}
+ .code-field,[dir=rtl] .code-field{mask-image:radial-gradient(ellipse at 50% 35%,transparent 32%,#000 90%)}
+ .code-field:after,[dir=rtl] .code-field:after{background:radial-gradient(ellipse at 50% 70%,var(--bg) 15%,transparent 65%)}
+ .code-spot{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .living-code .code-scroll,.living-code .code-cursor,.living-code .code-viewmodel .code-window:before,.living-code .code-glows:before,.living-code .code-glows:after,.living-code .code-field{animation:none!important}
+ .living-code .code-pane,.living-code .code-pane:after,.living-code .code-terminal pre{transition:none}
+ .living-code .code-spot{display:none;transition:none}
+}
