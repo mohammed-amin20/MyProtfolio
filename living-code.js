@@ -9,20 +9,31 @@
   const transcript = terminal.textContent;
   const depth = background.querySelector('.code-depth');
   const spot = background.querySelector('.code-spot');
-  const panes = [...background.querySelectorAll('.code-pane')];
+  const trail = document.createElement('div');
+  trail.className = 'code-trail';
+  // Keep the light outside the code mask so it follows the pointer across the hero.
+  background.append(trail, spot);
+  // A crisp copy is visible only through the feathered flashlight aperture.
+  // Moving the aperture and counter-moving its contents keeps the text aligned.
+  const reveal = document.createElement('div');
+  reveal.className = 'code-reveal';
+  const revealDepth = depth.cloneNode(true);
+  reveal.append(revealDepth);
+  background.querySelector('.code-field').append(reveal);
+  const revealTerminal = reveal.querySelector('.code-terminal code');
+  const setTerminal = text => { terminal.textContent = text; revealTerminal.textContent = text; };
   let visible = false, active = false, timer = 0, frame = 0;
   let count = transcript.length;
   let phase = 'typing', pointing = false, lastTime = 0;
   let x = 0, y = 0, targetX = 0, targetY = 0;
+  let trailX = 0, trailY = 0;
   let shiftX = 0, shiftY = 0, targetShiftX = 0, targetShiftY = 0;
-  let bounds, paneBounds = [];
+  let bounds;
 
   const measure = () => {
     bounds = background.getBoundingClientRect();
-    paneBounds = panes.map(pane => {
-      const rect = pane.getBoundingClientRect();
-      return { left:rect.left - bounds.left, top:rect.top - bounds.top, width:rect.width, height:rect.height };
-    });
+    revealDepth.style.width = `${bounds.width}px`;
+    revealDepth.style.height = `${bounds.height}px`;
   };
 
   const type = () => {
@@ -36,19 +47,18 @@
     if (phase === 'fading') {
       count = 0;
       phase = 'typing';
-      terminal.textContent = '';
+      setTerminal('');
       background.classList.remove('is-resetting');
       timer = setTimeout(type, 900);
       return;
     }
     count += 1;
-    terminal.textContent = transcript.slice(0, count);
+    setTerminal(transcript.slice(0, count));
     timer = setTimeout(type, count === transcript.length ? 22000 : transcript[count - 1] === '\n' ? 1300 : 210);
   };
   const stopPointer = (immediate = false) => {
     pointing = false;
     background.classList.remove('is-pointing');
-    panes.forEach(pane => pane.style.removeProperty('--code-hover'));
     targetShiftX = 0;
     targetShiftY = 0;
     if (immediate) {
@@ -75,7 +85,7 @@
       count = transcript.length;
       phase = 'typing';
       background.classList.remove('is-resetting');
-      terminal.textContent = transcript;
+      setTerminal(transcript);
     }
   };
   const paint = now => {
@@ -84,19 +94,27 @@
     // Time-based easing keeps the same quiet response on 60 Hz and 120 Hz screens.
     const elapsed = lastTime ? Math.min(now - lastTime, 64) : 16;
     lastTime = now;
-    const follow = 1 - Math.exp(-elapsed / 190);
+    const follow = 1 - Math.exp(-elapsed / 110);
+    const trailFollow = 1 - Math.exp(-elapsed / 360);
     const settle = 1 - Math.exp(-elapsed / 420);
     if (pointing) {
       x += (targetX - x) * follow;
       y += (targetY - y) * follow;
+      trailX += (targetX - trailX) * trailFollow;
+      trailY += (targetY - trailY) * trailFollow;
       spot.style.transform = `translate3d(${x - 260}px,${y - 260}px,0)`;
+      trail.style.transform = `translate3d(${trailX - 210}px,${trailY - 210}px,0)`;
     }
     shiftX += (targetShiftX - shiftX) * settle;
     shiftY += (targetShiftY - shiftY) * settle;
     depth.style.setProperty('--code-x', `${shiftX}px`);
     depth.style.setProperty('--code-y', `${shiftY}px`);
     depth.style.transform = `translate3d(${shiftX}px,${shiftY}px,0)`;
-    const moving = pointing && (Math.abs(targetX - x) > .2 || Math.abs(targetY - y) > .2);
+    reveal.style.transform = `translate3d(${x - 260}px,${y - 260}px,0)`;
+    revealDepth.style.transform = `translate3d(${260 - x + shiftX}px,${260 - y + shiftY}px,0)`;
+    revealDepth.style.setProperty('--code-x', `${shiftX}px`);
+    revealDepth.style.setProperty('--code-y', `${shiftY}px`);
+    const moving = pointing && (Math.abs(targetX - x) > .2 || Math.abs(targetY - y) > .2 || Math.abs(targetX - trailX) > .2 || Math.abs(targetY - trailY) > .2);
     if (moving || Math.abs(targetShiftX - shiftX) > .01 || Math.abs(targetShiftY - shiftY) > .01) {
       frame = requestAnimationFrame(paint);
     }
@@ -108,15 +126,8 @@
     targetY = event.clientY - bounds.top;
     targetShiftX = (targetX / bounds.width - .5) * 12;
     targetShiftY = (targetY / bounds.height - .5) * 9;
-    if (!pointing) { x = targetX; y = targetY; }
+    if (!pointing) { x = trailX = targetX; y = trailY = targetY; }
     pointing = true;
-    // A broad proximity falloff reveals the nearest editor gently; no hit targets.
-    paneBounds.forEach((rect, index) => {
-      const dx = Math.max(rect.left - targetX, 0, targetX - rect.left - rect.width);
-      const dy = Math.max(rect.top - targetY, 0, targetY - rect.top - rect.height);
-      const proximity = Math.max(0, 1 - Math.hypot(dx, dy) / 280);
-      panes[index].style.setProperty('--code-hover', (proximity * proximity).toFixed(3));
-    });
     background.classList.add('is-pointing');
     if (!frame) { lastTime = 0; frame = requestAnimationFrame(paint); }
   }, { passive:true });
@@ -134,5 +145,6 @@
       update();
     }).observe(hero);
   } else { visible = true; }
+  measure();
   update();
 })();

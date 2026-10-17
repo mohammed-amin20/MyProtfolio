@@ -1142,14 +1142,21 @@ to{background-position:100% 50%}
 .is-enhanced .code-field{animation:code-arrive 3.2s ease-out both;animation-play-state:paused}
 .code-field:after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 25% 42% at 77% 48%,var(--bg) 68%,transparent 145%)}
 .code-depth{position:absolute;inset:0}
-.code-pane{--code-opacity:.3;--code-reveal:.15;position:absolute;width:360px;color:var(--code-ink);opacity:calc(var(--code-opacity) + var(--code-hover,0) * var(--code-reveal));font:12px/1.95 var(--font-mono);text-align:left;direction:ltr;unicode-bidi:isolate;white-space:pre;border:1px solid color-mix(in srgb,var(--lime) 16%,transparent);border-radius:10px;background:linear-gradient(135deg,color-mix(in srgb,var(--panel) 65%,transparent),transparent 90%);overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 87%,transparent),linear-gradient(#000 75%,transparent);mask-composite:intersect;transition:opacity 1.8s cubic-bezier(.22,1,.36,1)}
-/* Frost only the outer lines: the middle stays crisp and readable.
-   Crossfade the fixed blur on hover instead of animating a costly filter. */
-.code-pane:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px);background:color-mix(in srgb,var(--bg) 8%,transparent);mask-image:linear-gradient(#000,transparent 25%,transparent 58%,#000),linear-gradient(90deg,#000,transparent 22%,transparent 78%,#000);mask-composite:add;opacity:calc(.95 - var(--code-hover,0) * .7);transition:opacity 2s cubic-bezier(.22,1,.36,1)}
+.code-reveal{position:absolute;top:0;left:0;width:520px;height:520px;pointer-events:none;opacity:0;mask-image:radial-gradient(circle closest-side,#000 0%,#000 25%,#000d 43%,#0006 65%,#0001 84%,transparent 100%);transition:opacity .65s ease-out}
+.code-reveal .code-depth{inset:auto;top:0;left:0}
+.code-reveal .code-pane{opacity:.94;filter:none;transition:none;border-color:color-mix(in srgb,var(--lime) 30%,transparent)}
+.code-reveal .code-far{opacity:.58}
+.code-reveal .code-pane:after{display:none}
+.is-pointing .code-reveal{opacity:1}
+.living-code:not(.is-running) .code-reveal{opacity:0;transition:none}
+.code-pane{--code-opacity:.3;position:absolute;width:360px;color:var(--code-ink);opacity:var(--code-opacity);font:12px/1.95 var(--font-mono);text-align:left;direction:ltr;unicode-bidi:isolate;white-space:pre;border:1px solid color-mix(in srgb,var(--lime) 16%,transparent);border-radius:10px;background:linear-gradient(135deg,color-mix(in srgb,var(--panel) 65%,transparent),transparent 90%);overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 87%,transparent),linear-gradient(#000 75%,transparent);mask-composite:intersect;transition:opacity 1.8s cubic-bezier(.22,1,.36,1)}
+/* Frost the resting panes; the flashlight adds aligned, crisp text through
+   a moving aperture without animating a costly blur filter. */
+.code-pane:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px);background:color-mix(in srgb,var(--bg) 8%,transparent);mask-image:linear-gradient(#000,transparent 25%,transparent 58%,#000),linear-gradient(90deg,#000,transparent 22%,transparent 78%,#000);mask-composite:add;opacity:.95;transition:opacity 2s cubic-bezier(.22,1,.36,1)}
 .code-tab{height:29px;padding:3px 15px;border-bottom:1px solid color-mix(in srgb,var(--lime) 22%,transparent);font-size:10px;color:var(--lime);letter-spacing:.3px}
 .code-window{height:210px;overflow:hidden;position:relative;mask-image:linear-gradient(transparent,#000 9%,#000 80%,transparent)}
 .code-scroll{animation:code-drift 125s linear infinite;animation-play-state:paused}
-.code-snippet{height:260px;padding:12px 0;background:repeating-linear-gradient(90deg,transparent 0 23px,color-mix(in srgb,var(--lime) 14%,transparent) 23px 24px);background-size:96px 100%;background-position:48px 0;background-repeat:no-repeat}
+.code-snippet{height:calc(var(--code-lines,10) * 23.4px + 24px);min-height:260px;padding:12px 0;background:repeating-linear-gradient(90deg,transparent 0 23px,color-mix(in srgb,var(--lime) 14%,transparent) 23px 24px);background-size:96px 100%;background-position:48px 0;background-repeat:no-repeat}
 .code-line{display:flex;height:23.4px}
 .code-line i{width:40px;flex-shrink:0;text-align:right;padding-right:12px;font-style:normal;color:color-mix(in srgb,var(--muted) 55%,transparent);font-size:10px}
 .code-keyword{color:var(--lime)}
@@ -1162,7 +1169,13 @@ to{background-position:100% 50%}
 .code-flutter{bottom:-35px;inset-inline-end:-42px;width:390px}
 .code-flutter .code-scroll{animation-delay:-48s;animation-duration:138s}
 .code-contract .code-scroll{animation-delay:-17s}
-.code-far{--code-opacity:.13;--code-reveal:.05;font-size:16px;filter:blur(1.4px);width:510px;border:0;background:none;transform:translate3d(calc(var(--code-x,0px) * -.65),calc(var(--code-y,0px) * -.65),0)}
+.code-navigation{top:-65px;left:36%;width:410px}
+.code-flow{top:37%;left:-55px;width:410px}
+.code-notifier{top:39%;right:-75px;width:370px}
+.code-navigation .code-scroll{animation-duration:168s;animation-delay:-38s}
+.code-flow .code-scroll{animation-duration:154s;animation-delay:-19s}
+.code-notifier .code-scroll{animation-duration:180s;animation-delay:-63s}
+.code-far{--code-opacity:.13;font-size:16px;filter:blur(1.4px);width:510px;border:0;background:none;transform:translate3d(calc(var(--code-x,0px) * -.65),calc(var(--code-y,0px) * -.65),0)}
 .code-far:after{display:none}
 .code-far .code-scroll{animation-duration:175s;animation-direction:reverse}
 .code-dao{top:36%;inset-inline-start:-140px}
@@ -1174,8 +1187,14 @@ to{background-position:100% 50%}
 .code-cursor{color:var(--lime);animation:code-blink 4s ease-in-out infinite;animation-play-state:paused}
 .code-viewmodel .code-window:before{content:'';position:absolute;inset:0 0 auto;height:24px;background:color-mix(in srgb,var(--lime) 12%,transparent);animation:code-current-line 65s ease-in-out infinite alternate;animation-play-state:paused}
 .code-viewmodel .code-window:after{content:'';position:absolute;inset:8px 5px 8px auto;width:11px;opacity:.25;background:repeating-linear-gradient(0deg,var(--lime) 0 1px,transparent 1px 5px);mask-image:linear-gradient(#000,transparent)}
-.code-spot{position:absolute;top:0;left:0;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--lime) 8%,transparent),color-mix(in srgb,var(--lime) 3%,transparent) 35%,transparent 72%);opacity:0;transition:opacity 1.8s ease}
-.is-pointing .code-spot{opacity:1}
+.code-spot{position:absolute;top:0;left:0;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--lime) 12%,transparent),color-mix(in srgb,var(--lime) 4%,transparent) 35%,transparent 72%);opacity:0;transition:opacity 1.4s ease}
+.code-spot:before,.code-spot:after{content:'';position:absolute;border-radius:50%;animation:code-pointer-breathe 5.6s ease-in-out infinite;animation-play-state:paused}
+.code-spot:before{inset:160px;background:radial-gradient(circle,transparent 35%,color-mix(in srgb,var(--lime) 13%,transparent) 49%,transparent 66%)}
+.code-spot:after{inset:205px;background:radial-gradient(circle,color-mix(in srgb,var(--mint) 16%,transparent),transparent 68%);animation-delay:-2.8s;animation-direction:reverse}
+.code-trail{position:absolute;top:0;left:0;width:420px;height:420px;border-radius:50%;background:radial-gradient(ellipse,color-mix(in srgb,var(--mint) 9%,transparent),color-mix(in srgb,var(--lime) 4%,transparent) 35%,transparent 70%);opacity:0;transition:opacity 2s ease}
+.is-pointing .code-spot,.is-pointing .code-trail{opacity:1}
+.is-running.is-pointing .code-spot:before,.is-running.is-pointing .code-spot:after{animation-play-state:running}
+.living-code:not(.is-running) .code-spot,.living-code:not(.is-running) .code-trail{opacity:0;transition:none}
 .is-running .code-scroll,.is-running .code-cursor,.is-running .code-viewmodel .code-window:before,.is-running .code-glows:before,.is-running .code-glows:after,.is-running .code-field{animation-play-state:running}
 [dir=rtl] .living-code .code-depth{direction:rtl}
 [dir=rtl] .code-compose{left:auto;right:-30px}
@@ -1185,6 +1204,9 @@ to{background-position:100% 50%}
 [dir=rtl] .code-dao{left:auto;right:-140px}
 [dir=rtl] .code-repository{right:auto;left:-190px}
 [dir=rtl] .code-terminal{left:auto;right:-24px}
+[dir=rtl] .code-navigation{left:auto;right:36%}
+[dir=rtl] .code-flow{left:auto;right:-55px}
+[dir=rtl] .code-notifier{right:auto;left:-75px}
 [dir=rtl] .code-field{mask-image:radial-gradient(ellipse 27% 38% at 72% 47%,transparent 70%,#000 165%),linear-gradient(#0000,#000 14%,#000 84%,#0000)}
 [dir=rtl] .code-field:after{background:radial-gradient(ellipse 25% 42% at 23% 48%,var(--bg) 68%,transparent 145%)}
 [data-theme=light] .living-code{--code-warm:#756040}
@@ -1193,12 +1215,13 @@ to{background-position:100% 50%}
 @keyframes code-blink{0%,100%{opacity:.25}50%{opacity:.9}}
 @keyframes code-arrive{from{opacity:0}to{opacity:1}}
 @keyframes code-haze{from{opacity:.65;transform:translate3d(-1%,-1%,0) scale(.98)}to{opacity:1;transform:translate3d(2%,1.5%,0) scale(1.04)}}
+@keyframes code-pointer-breathe{0%,100%{transform:scale(.78);opacity:.45}50%{transform:scale(1.16);opacity:1}}
 @media(max-width:700px){
  .hero .living-code{inset:0 -24px}
- .code-pane{width:290px;font-size:12px;--code-opacity:.23;--code-reveal:0}
+ .code-pane{width:290px;font-size:12px;--code-opacity:.23}
  .code-pane:after{backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px)}
  .code-glows:before,.code-glows:after{filter:blur(20px)}
- .code-tab,.code-viewmodel .code-window:after,.code-far,.code-contract{display:none}
+ .code-tab,.code-viewmodel .code-window:after,.code-far,.code-contract,.code-extra{display:none}
  .code-compose{top:-70px;inset-inline-start:-100px}
  .code-viewmodel{top:38%;inset-inline-end:-145px}
  .code-flutter{bottom:9%;inset-inline-end:-150px}
@@ -1209,10 +1232,16 @@ to{background-position:100% 50%}
  [dir=rtl] .code-terminal{left:auto;right:-35px}
  .code-field,[dir=rtl] .code-field{mask-image:radial-gradient(ellipse at 50% 35%,transparent 32%,#000 90%)}
  .code-field:after,[dir=rtl] .code-field:after{background:radial-gradient(ellipse at 50% 70%,var(--bg) 15%,transparent 65%)}
- .code-spot{display:none}
+ .code-spot,.code-trail,.code-reveal{display:none}
+}
+@media(hover:none),(pointer:coarse){.code-spot,.code-trail,.code-reveal{display:none}}
+@media(min-width:701px) and (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ .is-enhanced .code-field > .code-depth .code-pane{opacity:.22}
+ .is-enhanced .code-field > .code-depth .code-far{opacity:.09}
 }
 @media(prefers-reduced-motion:reduce){
  .living-code .code-scroll,.living-code .code-cursor,.living-code .code-viewmodel .code-window:before,.living-code .code-glows:before,.living-code .code-glows:after,.living-code .code-field{animation:none!important}
  .living-code .code-pane,.living-code .code-pane:after,.living-code .code-terminal pre{transition:none}
- .living-code .code-spot{display:none;transition:none}
+ .living-code .code-spot,.living-code .code-trail,.living-code .code-reveal{display:none;transition:none}
+ .living-code .code-spot:before,.living-code .code-spot:after{animation:none}
 }
