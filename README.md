@@ -1,66 +1,135 @@
-# Mohammed Ghazal — Android & Flutter Developer
+<div align="center">
 
-Portfolio of Mohammed Amen Ghazal, an Android and Flutter developer based in Gaza, Palestine.
-One static page: bilingual English/Arabic with RTL, light and dark themes, and 106 real app screens.
+<img src="assets/mg-mark.svg" alt="Mohammed Ghazal monogram" width="76" height="76">
 
-**Live site:** https://mohammed-ghazal.netlify.app
+# Mohammed Ghazal
 
-![Portfolio preview](assets/og-image.png)
+**Android & Flutter Developer | Gaza, Palestine**
 
-## Highlights
+Thoughtful interfaces. Reliable mobile apps.
 
-- Bilingual English/Arabic with a full right-to-left layout (Tajawal for Arabic typography)
-- Light and dark themes, system preference as the default, remembered in local storage
-- Five projects with category filtering, plus per-gallery dark/light theme filters
-- Keyboard-accessible image viewer and certificate dialog (Escape, focus restoration, live counters)
-- Scroll progress bar, staggered scroll reveals, and count-up hero stats via IntersectionObserver
-- Reduced-motion support, plus working navigation and image links when JavaScript is disabled
-- WebP derivatives with `<picture>` and responsive `srcset` for screenshots, certificates, logos, and the portrait
+[Explore the portfolio](https://mohammed-ghazal.netlify.app/) &nbsp; / &nbsp; [Selected work](https://mohammed-ghazal.netlify.app/#work) &nbsp; / &nbsp; [Let's talk](https://mohammed-ghazal.netlify.app/#contact)
 
-## Projects
+[![Mohammed Ghazal portfolio preview](assets/og-image.png)](https://mohammed-ghazal.netlify.app/)
 
-| Project | Category | Stack | Screens | Source |
-| --- | --- | --- | --- | --- |
-| devZ | Developer community | Kotlin, Compose, Clean Architecture, MVI | 56 | [repo](https://github.com/mohammed-amin20/devz) |
-| Memo | Offline notes | Kotlin, Compose, Room, Hilt | 30 | [repo](https://github.com/mohammed-amin20/Memo) |
-| Dictionary | Language & learning | Kotlin, Compose, MVI, Retrofit | 9 | [repo](https://github.com/mohammed-amin20/Dictionary) |
-| Rick & Morty | Entertainment | Kotlin, Compose, Clean Architecture, MVI, Room | 11 | [repo](https://github.com/mohammed-amin20/Rick-And-Morty) |
-| Company accounting app | Business | Flutter, Supabase | — | in development |
+**English & Arabic** | **Light & dark themes** | **Responsive layouts** | **No build step**
 
-Also included: three Avatar training certificates (90 training hours) with published credential IDs.
+</div>
 
-## Tech stack
+## About this portfolio
 
-Kotlin · Jetpack Compose · Flutter & Dart · Clean Architecture · MVI · Room · Hilt · Retrofit · Firebase · Supabase · REST APIs
+A personal portfolio showcasing my Android and Flutter work, development services, and training certificates. Explore app interfaces, read about the work behind each project, and start a conversation about your next mobile app.
 
-## Repository structure
+The website is built with HTML, CSS, and vanilla JavaScript. It runs as a static site, with no application backend or package installation required to preview it.
 
-```
-index.html            page content and generated work/certificate sections
-styles.css            single stylesheet: tokens, base, layers, polish
-experience.js         translations, themes, scroll progress, reveals, counters
-portfolio.js          navigation, filters, screenshot viewer
-certificates.js       certificate dialog
-assets/               logos, portrait + WebP sizes, CV, screenshots
-                      (devz/, memo/, dictionary/, rick-and-morty/)
-certificates/         original bilingual certificate artwork
-tools/                build_showcase.py, build_certificates.py, optimize_assets.py
-robots.txt sitemap.xml assets/og-image.png
-```
+## The experience
 
-Generated regions are written by `tools/build_showcase.py` and `tools/build_certificates.py` — edit those scripts instead of `index.html` when changing project or certificate content.
+| Feature | What to expect |
+| --- | --- |
+| Bilingual interface | English and Arabic, with right-to-left layouts and Tajawal Arabic typography. |
+| Theme preferences | Light and dark modes, an initial system-based theme, and preferences saved when browser storage is available. |
+| Project showcase | Category filters, app screenshot galleries, and per-gallery light/dark screenshot filters. |
+| Accessible viewers | Screenshot and certificate dialogs with keyboard navigation, Escape handling, and focus restoration. |
+| Considered motion | Scroll reveals, animated statistics, a living-code hero, and decorative effects with reduced-motion support. |
+| Optimized imagery | WebP derivatives, original image fallbacks, and responsive portrait sizes. |
+| Direct contact | A personal contact card with WhatsApp, browser-based Gmail compose, an alternative email-app link, and colored social icons. |
+| Progressive enhancement | Navigation and direct image links remain usable without JavaScript. |
 
-## Local development
+## Selected projects
+
+| Project | Purpose | Featured technologies | Source |
+| --- | --- | --- | --- |
+| **devZ** | Developer Q&A community with profiles, jobs, and moderation tools. | Kotlin, Jetpack Compose, Clean Architecture, MVI | [Repository](https://github.com/mohammed-amin20/devz) |
+| **Memo** | Offline notes with search, categories, and a PIN-protected hidden area. | Kotlin, Jetpack Compose, Room, Hilt | [Repository](https://github.com/mohammed-amin20/Memo) |
+| **Dictionary** | English definitions, pronunciation audio, and Arabic translation. | Kotlin, Jetpack Compose, MVI, Retrofit | [Repository](https://github.com/mohammed-amin20/Dictionary) |
+| **Rick & Morty** | Character browsing, search, detailed profiles, and offline caching. | Kotlin, Jetpack Compose, Room, Retrofit | [Repository](https://github.com/mohammed-amin20/Rick-And-Morty) |
+| **Company accounting app** | Business application currently presented as work in progress. | Flutter, Supabase | In development |
+
+The portfolio also includes three Avatar training certificates totaling 90 training hours, with English/Arabic artwork and credential verification links.
+
+## Technology
+
+**This website:** semantic HTML, CSS, vanilla JavaScript, inline SVG, and Python maintenance scripts.
+
+**My mobile development toolkit:** Kotlin, Jetpack Compose, Flutter, Dart, Clean Architecture, MVI, Room, Hilt, Retrofit, Firebase, Supabase, and REST APIs.
+
+## Run locally
+
+Clone the repository:
 
 ```bash
-python -m http.server 8000     # serve at http://localhost:8000
-python tools/build_showcase.py # regenerate the work section
-python tools/build_certificates.py
+git clone https://github.com/mohammed-amin20/MyProtfolio.git
+cd MyProtfolio
+```
+
+Open `index.html` directly in your browser, or serve the folder with Python 3:
+
+```bash
+python -m http.server 8000
+```
+
+Visit [localhost:8000](http://localhost:8000). No Node.js installation, environment variables, or production build is needed.
+
+## Repository guide
+
+| Path | Responsibility |
+| --- | --- |
+| [`index.html`](index.html) | Page content, metadata, and generated project/certificate sections. |
+| [`styles.css`](styles.css) | Theme tokens, layouts, component styling, responsive rules, and motion. |
+| [`portfolio.js`](portfolio.js) | Navigation, project and screenshot theme filters, and the image viewer. |
+| [`experience.js`](experience.js) | Arabic translations, theme/language preferences, reveals, counters, and motion helpers. |
+| [`living-code.js`](living-code.js) | Animated code presentation in the hero. |
+| [`certificates.js`](certificates.js) | Certificate viewer and its interactions. |
+| [`assets/`](assets/) | Portrait, logos, CV, social preview, and project screenshots. |
+| [`certificates/`](certificates/) | Original certificate artwork and WebP derivatives. |
+| [`tools/`](tools/) | Scripts for regenerating content and optimizing images. |
+| [`robots.txt`](robots.txt) / [`sitemap.xml`](sitemap.xml) | Search-engine discovery files. |
+
+## Update the content
+
+Edit general page content and contact links in `index.html`. Keep matching Arabic text in `experience.js` synchronized when changing English copy. Update colors, typography, and layout in `styles.css`.
+
+Project and certificate sections are generated. Edit their metadata in the corresponding Python script so that future regeneration preserves your changes.
+
+| Task | Command |
+| --- | --- |
+| Regenerate the project showcase | `python tools/build_showcase.py` |
+| Regenerate the certificate section | `python tools/build_certificates.py` |
+| Rebuild optimized image derivatives | `python tools/optimize_assets.py` |
+
+Run these commands from the repository root and review the resulting diff. The showcase script also defines screenshot walkthrough order and preview selections.
+
+Image optimization requires **Pillow**; it is optional for running the website:
+
+```bash
+python -m pip install Pillow
 python tools/optimize_assets.py
 ```
 
-No dependencies or build step are required; the site is served as static files. Deploy steps are in [README.txt](README.txt).
+Keep original images and existing filename casing intact. Platform logo sources are documented in [`assets/platforms/SOURCES.md`](assets/platforms/SOURCES.md).
 
-## Contact
+## Check before publishing
 
-[GitHub](https://github.com/mohammed-amin20) · [Upwork](https://www.upwork.com/freelancers/~012fda40e3e6df2a37) · [Mostaql](https://mostaql.com/u/Mohammed_AmenGH) · [Khamsat](https://khamsat.com/user/mohammed_amengh) · [Freelancer](https://www.freelancer.com/u/MohammedAmenGH) · mohammedamenghzal03@gmail.com
+There is no automated test framework configured. Preview changes at desktop and mobile widths, then check:
+
+- English/Arabic layouts, light/dark themes, and reduced-motion behavior.
+- Mobile navigation, project filters, and screenshot theme filters.
+- Gallery and certificate navigation, Escape handling, and keyboard focus restoration.
+- Image, CV, Gmail, alternative email-app, WhatsApp, and social links.
+- Navigation and image access with JavaScript disabled.
+
+The Gmail action opens a compose page with the recipient and subject filled in; visitors may need to sign in. The alternative email link uses their configured email application. WhatsApp opens a chat. Visitors send their messages themselves; the website does not submit a contact form.
+
+## Deploy
+
+Publish the repository's static files with Netlify or another static host. The publish directory is the repository root; no build command is required. Include the root HTML/CSS/JavaScript files, `assets/`, and `certificates/`.
+
+If deploying to a different domain, update the canonical URL, social metadata, and structured data in `index.html`, along with `robots.txt` and `sitemap.xml`.
+
+## Let's build something useful
+
+[Chat on WhatsApp](https://wa.me/972592923130) | [Send via Gmail](https://mail.google.com/mail/?view=cm&fs=1&to=mohammedamenghzal03%40gmail.com) | [GitHub](https://github.com/mohammed-amin20)
+
+Prefer a freelance platform? Find me on [Upwork](https://www.upwork.com/freelancers/~012fda40e3e6df2a37), [Mostaql](https://mostaql.com/u/Mohammed_AmenGH), [Khamsat](https://khamsat.com/user/mohammed_amengh), or [Freelancer](https://www.freelancer.com/u/MohammedAmenGH).
+
+[Facebook](https://facebook.com/mohammed.ameen.03) | [Instagram](https://instagram.com/mo.a.03/)
