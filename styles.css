@@ -788,6 +788,81 @@ main{overflow:clip}
 .social-card:before,.social-arrow{transition:none}
 }
 
+/* Closing invitation: oversized editorial type and a personal contact card. */
+.contact{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:center;gap:46px 64px;padding:42px 52px 30px;background:linear-gradient(135deg,color-mix(in srgb,var(--lime) 9%,var(--panel)),var(--panel) 62%);color:var(--ink);border:1px solid color-mix(in srgb,var(--lime) 23%,var(--line));border-radius:30px;box-shadow:var(--shadow)}
+.contact:after{display:none}
+.contact-topline{grid-column:1/-1;display:flex;align-items:center;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.contact .eyebrow{color:var(--lime);font-size:11px;letter-spacing:2.4px;margin:0;display:flex;align-items:center;gap:10px}
+.contact .eyebrow:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px color-mix(in srgb,var(--lime) 9%,transparent)}
+.contact-top-caption{margin-inline-start:auto;font:10px var(--font-mono);letter-spacing:1.2px;color:var(--muted)}
+.contact-topline>svg{width:26px;height:26px;color:var(--lime);stroke:currentColor;stroke-width:1.3;flex-shrink:0}
+.contact h2{font-size:clamp(58px,6.3vw,86px);font-weight:500;line-height:1.04;letter-spacing:-4.5px;margin:0 0 28px;text-wrap:balance}
+.contact h2>span,.contact h2>em{display:block}
+.contact h2 em{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-style:italic;color:var(--lime);letter-spacing:-3.5px;line-height:1.14}
+.contact p{color:var(--muted)}
+.contact-copy>p{font-size:15px;max-width:365px;line-height:1.9;margin:0}
+.contact-process{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:38px;padding-top:23px;border-top:1px solid var(--line)}
+.contact-process div{display:flex;flex-direction:column;gap:10px}
+.contact-process span{font:11px var(--font-mono);color:var(--lime)}
+.contact-process strong{font-size:11px;font-weight:500;color:var(--muted);line-height:1.6}
+.contact-direct{--card-ink:#242035;--card-muted:#595168;--card-line:#bcb0d8;display:block;min-width:0;padding:28px;background:linear-gradient(145deg,#ece4ff,#d8c9f7);color:var(--card-ink);border:1px solid #f0eaff;border-radius:22px;box-shadow:0 18px 50px #0002, inset 0 1px 0 #ffffff80}
+.contact-person{display:flex;align-items:center;gap:12px;padding-bottom:22px;border-bottom:1px solid var(--card-line)}
+.contact-person img{width:48px;height:48px;object-fit:cover;object-position:center 25%;border-radius:50%;border:2px solid #fff9}
+.contact-person>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.contact-person strong{font-size:13px;font-weight:650}
+.contact-person div>span{font-size:10px;color:var(--card-muted)}
+.contact-person-mark{margin-inline-start:auto;color:#76638f}
+.contact-direct svg{width:21px;height:21px;flex-shrink:0;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.contact-card-heading{margin-top:26px;color:var(--card-muted);font-size:10px;font-weight:600;letter-spacing:1.8px}
+.contact-direct h3{font-size:34px;font-weight:500;line-height:1.15;letter-spacing:-1.2px;margin:12px 0 16px;text-wrap:balance}
+.contact-direct h3 span{color:#655080}
+.contact .contact-direct>p{color:var(--card-muted);font-size:13px;line-height:1.8;margin:0 0 24px}
+.contact .contact-primary{display:flex;justify-content:space-between;gap:12px;width:100%;min-height:60px;background:var(--card-ink);color:#fff;border:1px solid transparent;border-radius:12px;padding:10px 12px 10px 18px;font-size:13px;font-weight:600;transition:background .2s,box-shadow .2s}
+.contact .contact-primary:hover{background:#40304f;box-shadow:0 7px 20px #34244926}
+.contact-action-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#ffffff12}
+.contact-whatsapp-label{display:flex;align-items:center;gap:10px}
+.contact-direct .contact-whatsapp-logo{width:24px;height:24px;color:#25d366;stroke:none}
+[dir=rtl] .contact-primary .contact-whatsapp-logo{transform:none}
+.contact-email{display:flex;align-items:center;gap:13px;min-height:76px;padding:15px;margin-top:12px;background:#ffffffb3;border:1px solid #fff;border-radius:12px;box-shadow:0 3px 9px #35234808;color:var(--card-ink);transition:background .2s,box-shadow .2s,transform .2s}
+.contact-email:hover{background:#fff;box-shadow:0 8px 22px #35234818;transform:translateY(-2px)}
+.contact-gmail-mark{display:grid;place-items:center;flex-shrink:0;width:38px;height:38px;background:#fff;border:1px solid #eee9f5;border-radius:11px}
+.contact-direct .contact-gmail-mark svg{width:24px;height:18px;stroke:none}
+.contact-email-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.contact-email-label{font-size:13px;font-weight:650;line-height:1.4}
+.contact-email-hint{font-size:11px;color:var(--card-muted);line-height:1.5}
+.contact-direct .contact-email-arrow{width:18px;height:18px;margin-inline-start:auto;color:#655080}
+.contact-email-alternative{padding:13px 0 10px;border-bottom:1px solid var(--card-line);text-align:center}
+.contact-email-alternative bdi{display:block;font-size:11px;overflow-wrap:anywhere;color:var(--card-muted)}
+.contact-email-alternative a{display:inline-flex;align-items:center;min-height:44px;font-size:11px;color:var(--card-ink);text-decoration:underline;text-underline-offset:3px}
+[dir=rtl] .contact-email-arrow{transform:scaleX(-1)}
+.contact-card-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0 10px;margin-top:8px;color:var(--card-muted);font-size:10px}
+.contact-card-foot a{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline;text-underline-offset:4px;color:var(--card-ink);font-size:11px}
+.contact-direct a:focus-visible{outline-color:#60389a;outline-offset:4px}
+.contact-socials{display:grid;grid-template-columns:1fr 1.6fr;align-items:center;gap:30px;border-color:var(--line);padding-top:25px}
+.contact-social-intro{display:block;margin:0}
+.contact-social-intro>span{color:var(--ink);font-size:10px;letter-spacing:1.8px}
+.contact .contact-social-intro p{opacity:1;color:var(--muted);font-size:12px;margin:4px 0 0}
+.contact-social-grid{gap:12px}
+.contact .social-card{min-height:68px;padding:10px 12px;border-radius:12px;gap:10px;box-shadow:none;border:1px solid transparent;background:transparent}
+.contact .social-card:before,.contact .social-card:after{display:none}
+.contact .social-card:hover{border-color:var(--line);background:var(--bg);transform:translateY(-2px)}
+.contact .social-logo{width:34px;height:34px;border-radius:10px;background:var(--soft);color:var(--lime);box-shadow:none}
+.contact .social-facebook .social-logo{background:#1877f2;color:#fff}
+.contact .social-instagram .social-logo{background:linear-gradient(35deg,#ffd676 -10%,#f36a46 20%,#d72b8c 55%,#7547d5 100%);color:#fff}
+.contact .social-logo svg{width:19px;height:19px}
+.contact .social-copy strong{font-size:12px;letter-spacing:0}
+.contact .social-copy bdi{font-size:10px}
+.contact .social-action{display:none}
+.contact .social-arrow{width:24px;height:24px;border:0;color:var(--muted)}
+[dir=rtl] .contact h2,[dir=rtl] .contact h2 em,[dir=rtl] .contact-direct h3,[dir=rtl] .contact .eyebrow,[dir=rtl] .contact-card-heading{letter-spacing:0}
+[dir=rtl] .contact h2{font-size:clamp(50px,5.4vw,72px);line-height:1.3}
+[dir=rtl] .contact h2 em{font-family:var(--font-ar);font-style:normal;line-height:1.3}
+[dir=rtl] .contact-primary svg,[dir=rtl] .contact-topline>svg{transform:scaleX(-1)}
+@media(max-width:1100px){.contact{padding:32px;gap:34px}.contact h2{font-size:66px}.contact-direct{padding:24px}.contact-socials{grid-template-columns:1fr}.contact-social-intro{display:flex;justify-content:space-between;gap:15px}}
+@media(max-width:850px){.contact{grid-template-columns:minmax(0,1fr)}.contact h2{font-size:clamp(58px,10vw,80px)}.contact-copy>p{max-width:480px}.contact-process{max-width:480px}.contact-direct{padding:30px}.contact-direct h3{font-size:38px}.contact-person div>span{font-size:12px}.contact .contact-direct>p{font-size:14px}.contact-card-foot{font-size:12px}.contact-email bdi{font-size:12px}}
+@media(max-width:540px){.contact{padding:26px 20px;gap:30px;border-radius:24px}.contact-topline{padding-bottom:20px}.contact-top-caption{display:none}.contact-topline>svg{margin-inline-start:auto}.contact h2{font-size:clamp(47px,12vw,64px);letter-spacing:-2.8px;margin-bottom:23px}.contact h2 em{letter-spacing:-2px}.contact-copy>p{font-size:14px}.contact-process{gap:10px;margin-top:25px;padding-top:20px}.contact-process strong{font-size:10px}.contact-direct{padding:22px 18px;border-radius:17px}.contact-person{gap:9px}.contact-person img{width:42px;height:42px}.contact-person strong{font-size:12px}.contact-person div>span{font-size:10px}.contact-person-mark{display:none}.contact-direct h3{font-size:32px}.contact .contact-direct>p{font-size:13px}.contact-card-foot{font-size:10px}.contact-email bdi{font-size:11px}.contact-socials{gap:16px;padding-top:22px}.contact-social-intro{display:block}.contact-social-grid{grid-template-columns:1fr;gap:2px}.contact .social-card{padding:10px 0}.contact .social-copy strong{font-size:13px}.contact .social-copy bdi{font-size:11px}[dir=rtl] .contact h2{font-size:clamp(42px,11vw,58px)}}
+@media(prefers-reduced-motion:reduce){.contact-email,.contact .contact-primary{transition:none}.contact-email:hover{transform:none}}
+
 /* Credentials use the portfolio's theme tokens in both languages. */
 .certificates{position:relative}
 

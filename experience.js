@@ -100,6 +100,36 @@
     'Main navigation':'التنقل الرئيسي', 'Display preferences':'تفضيلات العرض', 'Filter projects':'تصفية المشاريع', 'Experience':'الخبرة', 'Close image viewer':'إغلاق عارض الصور', 'Mohammed Ghazal home':'محمد غزال — الرئيسية',
     'Mohammed Amen Ghazal, Android and Flutter developer':'محمد أمين غزال، مطور أندرويد وFlutter', '02 / EXPERTISE':'٠٢ / الخبرات', '01 / PROJECTS':'٠١ / المشاريع'
   };
+  Object.assign(translations, {
+    'Send via Gmail': 'راسلني عبر Gmail',
+    "Let's discuss your project": 'لنتحدث عن مشروعك',
+    'Use another email app': 'استخدم تطبيق بريد آخر',
+    'GOOD IDEAS DESERVE A GREAT NEXT STEP': 'الأفكار المميزة تستحق خطوة قادمة مميزة',
+    'Your vision.': 'رؤيتك.',
+    'Our next': 'معاً نصنع',
+    'great app.': 'تطبيقاً مميزاً.',
+    "Bring the idea. I'll bring the craft. Together, let's build a mobile experience that feels as good as it works.": 'أنت تأتي بالفكرة، وأنا أضع خبرتي بين يديك. معاً نبني تجربة تطبيق تجمع بين جمال التصميم وإتقان الأداء.',
+    'How we start': 'كيف نبدأ',
+    'Share your idea': 'شارك فكرتك',
+    'Define the scope': 'نحدد نطاق العمل',
+    'Build with purpose': 'نبني برؤية واضحة',
+    'YOUR NEXT CHAPTER': 'خطوتك القادمة',
+    "Let's build": 'لنبنِ معاً',
+    'something useful.': 'شيئاً مفيداً.',
+    "Tell me about your project and where you'd like to take it. We'll find the right next step together.": 'حدثني عن مشروعك وما تطمح إليه. سنحدد معاً الخطوة القادمة المناسبة.',
+    "LET'S TALK": "لنتحدث",
+    "Your next app.": "تطبيقك القادم.",
+    "Let's make it happen.": "لنحوّله إلى واقع.",
+    "Have an idea, a product to improve, or a challenge to solve? Let's turn it into a mobile experience people love to use.": "لديك فكرة، أو منتج تريد تحسينه، أو تحدٍّ تبحث عن حل له؟ لنحوّله إلى تجربة تطبيق يحب الناس استخدامها.",
+    "Android & Flutter": "أندرويد وFlutter",
+    "New builds & improvements": "تطبيقات جديدة وتطوير القائم",
+    "A great project starts with a conversation.": "كل مشروع مميز يبدأ بمحادثة.",
+    "Start a conversation": "لنبدأ الحديث",
+    "Tell me what you have in mind.": "حدثني عن فكرتك.",
+    "Share a little about your project, your goals, and your timeline. We'll work out the next step together.": "شاركني نبذة عن مشروعك وأهدافك والجدول الزمني الذي يناسبك. سنحدد الخطوة القادمة معاً.",
+    "Email me directly": "راسلني عبر البريد",
+    "Prefer a quick message?": "تفضّل رسالة سريعة؟"
+});
   const translate = text => {
     if (root.lang !== 'ar') return text;
     if (translations[text]) return translations[text];
