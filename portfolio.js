@@ -17,7 +17,12 @@
   const filters = [...document.querySelectorAll('[data-filter]')];
   filters.forEach(button => button.addEventListener('click', () => {
     filters.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-    cards.forEach(card => { card.hidden = button.dataset.filter !== 'all' && card.dataset.category !== button.dataset.filter; });
+    cards.forEach(card => {
+      const show = button.dataset.filter === 'all' || card.dataset.category === button.dataset.filter;
+      card.hidden = !show;
+      // Softly reintroduce revealed cards; hidden cards switch instantly.
+      if (show) { card.classList.remove('is-entering'); void card.offsetWidth; card.classList.add('is-entering'); }
+    });
     const count = cards.filter(c => !c.hidden).length;
     document.getElementById('project-results').textContent = window.portfolioResults(count);
   }));
@@ -28,6 +33,38 @@
       screen.hidden = button.dataset.themeFilter !== 'all' && screen.dataset.theme !== 'both' && screen.dataset.theme !== button.dataset.themeFilter;
     });
   }));
+
+  // Progressive enhancement: glide the gallery open and closed. Without the API,
+  // reduced motion, or JavaScript the native details behavior stays in charge.
+  if (typeof Element.prototype.animate === 'function' && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
+    document.querySelectorAll('.project-gallery').forEach(details => {
+      const summary = details.querySelector('summary');
+      if (!summary) return;
+      let animating = false;
+      summary.addEventListener('click', event => {
+        if (animating) { event.preventDefault(); return; }
+        event.preventDefault();
+        const opening = !details.open;
+        if (opening) details.open = true;
+        const start = opening ? summary.offsetHeight : details.scrollHeight;
+        const end = opening ? details.scrollHeight : summary.offsetHeight;
+        details.style.overflow = 'hidden';
+        animating = true;
+        const animation = details.animate([{ height: `${start}px` }, { height: `${end}px` }], { duration: 340, easing: 'cubic-bezier(.16,1,.3,1)' });
+        let settled = false;
+        const finish = () => {
+          if (settled) return;
+          settled = true;
+          try { animation.cancel(); } catch {}
+          if (!opening) details.open = false;
+          details.style.overflow = '';
+          animating = false;
+        };
+        animation.onfinish = finish;
+        setTimeout(finish, 420);
+      });
+    });
+  }
 
   const dialog = document.getElementById('image-viewer');
   const img = document.getElementById('viewer-image');
@@ -41,16 +78,29 @@
     document.getElementById('viewer-count').textContent = document.documentElement.lang === 'ar' ? `${index + 1} من ${active.length}` : `${index + 1} of ${active.length}`;
   };
   document.addEventListener('portfolio-language-change', () => { if (dialog.open && active.length) show(index); });
-  document.querySelectorAll('.screenshot-link').forEach(link => link.addEventListener('click', e => {
-    if (typeof dialog.showModal !== 'function' || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-    e.preventDefault(); opener = link;
+  const openViewer = (link, focusTarget) => {
+    opener = focusTarget || link;
     const card = link.closest('.project-card');
     // Use the complete gallery without duplicate cover images; respect its theme filter.
     active = [...card.querySelectorAll('.screen-grid .screenshot-link')].filter(a => !a.closest('.screen').hidden);
     if (!active.some(a => a.getAttribute('href') === link.getAttribute('href'))) active.unshift(link);
     show(active.findIndex(a => a.getAttribute('href') === link.getAttribute('href')));
     dialog.showModal(); document.body.classList.add('viewer-open');
+  };
+  document.querySelectorAll('.screenshot-link').forEach(link => link.addEventListener('click', e => {
+    if (typeof dialog.showModal !== 'function' || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    openViewer(link);
   }));
+  // "View all N screens" buttons open the gallery viewer on the first visible screen.
+  document.querySelectorAll('[data-gallery-open]').forEach(button => {
+    button.classList.add('is-ready');
+    button.addEventListener('click', () => {
+      const card = button.closest('.project-card');
+      const link = [...card.querySelectorAll('.screen-grid .screenshot-link')].find(a => !a.closest('.screen').hidden);
+      if (link) openViewer(link, button);
+    });
+  });
   document.getElementById('viewer-close').addEventListener('click', () => dialog.close());
   document.getElementById('viewer-prev').addEventListener('click', () => show(index - 1));
   document.getElementById('viewer-next').addEventListener('click', () => show(index + 1));

@@ -130,11 +130,36 @@
     "Email me directly": "راسلني عبر البريد",
     "Prefer a quick message?": "تفضّل رسالة سريعة؟"
 });
+  Object.assign(translations, {
+    'Platform': 'المنصة',
+    'Role': 'الدور',
+    'Screens': 'الشاشات',
+    'Source': 'المصدر',
+    'Open source': 'مفتوح المصدر',
+    'Android': 'أندرويد',
+    'Android frontend': 'واجهات أندرويد',
+    'Sole developer': 'المطوّر الوحيد',
+    '56 screens': '٥٦ شاشة', '30 screens': '٣٠ شاشة', '9 screens': '٩ شاشات', '11 screens': '١١ شاشة',
+    'Dark + light': 'داكن وفاتح',
+    'Dark + light themes': 'مظاهر داكنة وفاتحة',
+    'Projects': 'المشاريع',
+    'App screens': 'شاشات التطبيق',
+    'Open-source repos': 'مستودعات مفتوحة المصدر',
+    'Android + iOS': 'أندرويد + iOS',
+    'Stack': 'التقنيات',
+    'Flutter · Supabase': 'Flutter · Supabase',
+    'Status': 'الحالة',
+    'In development': 'قيد التطوير',
+    'Company accounting.': 'محاسبة الشركات.',
+    'Built solo.': 'بناها مطوّر واحد.'
+});
   const translate = text => {
     if (root.lang !== 'ar') return text;
     if (translations[text]) return translations[text];
     const gallery = text.match(/^Explore all (\d+) app screens$/);
     if (gallery) return `استكشف جميع الشاشات (${gallery[1]})`;
+    const browse = text.match(/^View all (\d+) screens$/);
+    if (browse) return `استعرض كل الشاشات (${browse[1]})`;
     return text;
   };
   window.portfolioText = translate;
@@ -315,7 +340,8 @@
     }
   }
   const ambientFx = document.querySelector('.ambient-fx');
-  if (ambientFx && finePointer.matches && !motion.matches) {
+  const cursorHero = document.querySelector('.hero');
+  if (ambientFx && cursorHero && finePointer.matches && !motion.matches) {
     let targetX = innerWidth / 2, targetY = innerHeight * .3, currentX = targetX, currentY = innerHeight * -1, spotFrame = 0;
     const paintSpot = () => {
       spotFrame = 0;
@@ -325,13 +351,14 @@
       ambientFx.style.setProperty('--spot-y', currentY.toFixed(1) + 'px');
       if (Math.abs(targetX - currentX) > .6 || Math.abs(targetY - currentY) > .6) spotFrame = requestAnimationFrame(paintSpot);
     };
-    addEventListener('pointermove', event => {
+    cursorHero.addEventListener('pointermove', event => {
       targetX = event.clientX; targetY = event.clientY;
       if (!ambientFx.classList.contains('is-tracking')) ambientFx.classList.add('is-tracking');
       if (!spotFrame) spotFrame = requestAnimationFrame(paintSpot);
     }, { passive:true });
     const hideSpot = () => ambientFx.classList.remove('is-tracking');
-    addEventListener('pointerleave', hideSpot);
+    cursorHero.addEventListener('pointerleave', hideSpot);
+    addEventListener('scroll', hideSpot, { passive:true });
     addEventListener('blur', hideSpot);
   }
   if (finePointer.matches && !motion.matches) {
