@@ -202,10 +202,9 @@
       if (language === 'ar' && original.endsWith(' screenshot theme')) value = 'مظهر لقطات التطبيق';
       element.setAttribute(name, value);
     });
-    languageButton.querySelector('span').textContent = language === 'ar' ? 'EN' : 'العربية';
-    languageButton.setAttribute('aria-label', language === 'ar' ? 'Switch to English' : 'التبديل إلى العربية');
-    languageButton.title = languageButton.getAttribute('aria-label');
-    languageButton.setAttribute('lang', language === 'ar' ? 'en' : 'ar');
+    languageButton.setAttribute('aria-checked', String(language === 'ar'));
+    languageButton.setAttribute('aria-label', language === 'ar' ? 'اللغة العربية' : 'Arabic language');
+    languageButton.title = language === 'ar' ? 'Switch to English' : 'التبديل إلى العربية';
     document.getElementById('project-results').textContent = window.portfolioResults([...document.querySelectorAll('.project-card')].filter(card => !card.hidden).length);
     document.title = language === 'ar' ? 'محمد غزال — مطور أندرويد وFlutter' : 'Mohammed Ghazal — Android & Flutter Developer';
     document.querySelector('meta[name="description"]').content = language === 'ar' ? 'محمد غزال، مطور أندرويد وFlutter. تطبيقات موثوقة وواجهات مدروسة باستخدام Kotlin وJetpack Compose.' : 'Mohammed Ghazal is an Android and Flutter developer building practical mobile apps with Kotlin, Jetpack Compose, and clean architecture.';
@@ -213,8 +212,52 @@
     applyTheme(root.dataset.theme);
     document.dispatchEvent(new Event('portfolio-language-change'));
   };
-  themeButton.addEventListener('click', () => { const theme = root.dataset.theme === 'light' ? 'dark' : 'light'; applyTheme(theme); store('portfolio-theme', theme); });
-  languageButton.addEventListener('click', () => { const language = root.lang === 'ar' ? 'en' : 'ar'; applyLanguage(language); store('portfolio-language', language); });
+  const preferenceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let preferenceTransition;
+  let preferenceQueue = Promise.resolve();
+  let fallbackAnimation;
+  const transitionPreference = (kind, update) => {
+    // Serialize DOM updates, but interrupt old motion when another choice arrives.
+    preferenceTransition?.skipTransition();
+    preferenceQueue = preferenceQueue.then(() => {
+      preferenceTransition?.skipTransition();
+      fallbackAnimation?.cancel();
+      if (preferenceMotion.matches || !document.startViewTransition) {
+        update();
+        if (!preferenceMotion.matches && document.body.animate) {
+          fallbackAnimation = document.body.animate([{ opacity: .65 }, { opacity: 1 }], { duration: 240, easing: 'ease-out' });
+        }
+        return;
+      }
+      root.style.setProperty('--language-shift', root.lang === 'ar' ? '-14px' : '14px');
+      root.dataset.preferenceTransition = kind;
+      const transition = document.startViewTransition(update);
+      preferenceTransition = transition;
+      const cleanup = () => {
+        if (preferenceTransition !== transition) return;
+        delete root.dataset.preferenceTransition;
+        preferenceTransition = null;
+      };
+      // A skipped or hidden-tab transition still applies the preference.
+      transition.ready.catch(() => {});
+      transition.finished.then(cleanup, cleanup);
+      return transition.updateCallbackDone;
+    }).catch(error => console.error('Preference change failed:', error));
+  };
+  preferenceMotion.addEventListener('change', () => {
+    if (preferenceMotion.matches) {
+      preferenceTransition?.skipTransition();
+      fallbackAnimation?.cancel();
+    }
+  });
+  themeButton.addEventListener('click', () => transitionPreference('theme', () => {
+    const theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+    applyTheme(theme); store('portfolio-theme', theme);
+  }));
+  languageButton.addEventListener('click', () => transitionPreference('language', () => {
+    const language = root.lang === 'ar' ? 'en' : 'ar';
+    applyLanguage(language); store('portfolio-language', language);
+  }));
   applyLanguage(root.lang === 'ar' ? 'ar' : 'en');
   document.querySelectorAll('.platform-wordmark img').forEach(image => {
     const updateLogo = () => image.parentElement.classList.toggle('has-logo', image.complete && image.naturalWidth > 0);
