@@ -375,12 +375,17 @@ html[data-preference-transition]::view-transition{pointer-events:none}
 html[data-preference-transition]::view-transition-group(root){animation:none}
 html[data-preference-transition]::view-transition-old(root),html[data-preference-transition]::view-transition-new(root){mix-blend-mode:normal;animation:none;height:100%}
 html[data-preference-transition=theme]::view-transition-old(root){z-index:1}
-html[data-preference-transition=theme]::view-transition-new(root){z-index:2;animation:theme-dissolve .65s cubic-bezier(.25,.1,.25,1) both}
+html[data-preference-transition=theme]::view-transition-new(root){z-index:2;animation:theme-reveal .95s cubic-bezier(.4,0,.2,1) both}
+html[data-preference-transition=theme][data-theme-direction=reverse]::view-transition-old(root){z-index:2;animation:theme-reveal-reverse .95s cubic-bezier(.4,0,.2,1) both}
+html[data-preference-transition=theme][data-theme-direction=reverse]::view-transition-new(root){z-index:1;animation:none}
+/* Capture the finished palette so the reveal never lands on half-transitioned colors. */
+html[data-preference-transition=theme] *,html[data-preference-transition=theme] *:before,html[data-preference-transition=theme] *:after{transition:none!important}
+html[data-theme-fallback] *,html[data-theme-fallback] *:before,html[data-theme-fallback] *:after{transition:background-color .55s ease,color .55s ease,border-color .55s ease,box-shadow .55s ease!important}
 html[data-preference-transition=language]::view-transition-old(root){animation:language-leave .22s ease-out both}
 html[data-preference-transition=language]::view-transition-new(root){animation:language-enter .38s cubic-bezier(.22,1,.36,1) both}
-/* Fade the new snapshot over an opaque old one to avoid a background flash.
-   Opacity keeps the transition light without repainting a moving mask. */
-@keyframes theme-dissolve{from{opacity:0}to{opacity:1}}
+/* Keep the old page opaque beneath a reveal anchored to the theme control. */
+@keyframes theme-reveal{from{clip-path:circle(0 at var(--theme-origin))}to{clip-path:circle(var(--theme-radius) at var(--theme-origin))}}
+@keyframes theme-reveal-reverse{from{clip-path:circle(var(--theme-radius) at var(--theme-origin))}to{clip-path:circle(0 at var(--theme-origin))}}
 @keyframes language-leave{to{opacity:0;transform:translateX(calc(var(--language-shift) * -1))}}
 @keyframes language-enter{from{opacity:0;transform:translateX(var(--language-shift))}to{opacity:1;transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){
@@ -544,7 +549,7 @@ to{opacity:1;transform:translateY(0)}
 .brand-mark,.footer-mark{box-shadow:0 4px 18px color-mix(in srgb,var(--lime) 18%,transparent)}
 
 /* Progressive enhancement: JavaScript only prepares elements when an observer exists. */
-.scroll-reveal{opacity:0;transform:translate3d(0,34px,0);transition:opacity .65s ease,transform .8s cubic-bezier(.16,1,.3,1);transition-delay:var(--reveal-delay,0ms)}
+.scroll-reveal{opacity:0;transform:translate3d(0,30px,0);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.16,1,.3,1);transition-delay:var(--reveal-delay,0ms)}
 
 .project-intro.scroll-reveal{transform:translate3d(0,48px,0)}
 
@@ -1423,7 +1428,7 @@ to{background-position:100% 50%}
 [dir=rtl] .meta-label,[dir=rtl] .collection-stats span,[dir=rtl] .collection-stats strong,[dir=rtl] .cover-chip,[dir=rtl] .pending-label{letter-spacing:0;text-transform:none;font-family:inherit}
 
 /* Work section: unified spacing rhythm and shared motion tokens. */
-.showcase{--pad-card:32px;--ease:cubic-bezier(.16,1,.3,1);--dur:.35s}
+.showcase{--pad-card:32px;--ease:cubic-bezier(.22,1,.36,1);--dur:.42s}
 .showcase .sectionhead{margin-bottom:40px}
 .collection-stats{margin-bottom:32px}
 .collection-stats li{padding:18px 28px}
@@ -1444,7 +1449,7 @@ to{background-position:100% 50%}
 .showcase .actions{margin-top:32px}
 .showcase .project-card{transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
 .showcase .project-cover{transition:transform .5s var(--ease),border-color var(--dur) var(--ease)}
-.showcase .project-cover.is-tilting{transition:transform .12s linear}
+.showcase .project-cover.is-tilting{transition:transform .22s cubic-bezier(.2,.75,.25,1)}
 .showcase .screen .screenshot-link{transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease)}
 .showcase .button{transition:transform var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease),color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
 .showcase .project-filters button,.showcase .theme-controls button{transition:background var(--dur) var(--ease),color var(--dur) var(--ease),border-color var(--dur) var(--ease),transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}

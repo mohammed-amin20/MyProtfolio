@@ -216,26 +216,44 @@
   let preferenceTransition;
   let preferenceQueue = Promise.resolve();
   let fallbackAnimation;
+  let fallbackTimer;
   const transitionPreference = (kind, update) => {
     // Serialize DOM updates, but interrupt old motion when another choice arrives.
     preferenceTransition?.skipTransition();
     preferenceQueue = preferenceQueue.then(() => {
       preferenceTransition?.skipTransition();
       fallbackAnimation?.cancel();
+      clearTimeout(fallbackTimer);
+      delete root.dataset.themeFallback;
       if (preferenceMotion.matches || !document.startViewTransition) {
+        if (!preferenceMotion.matches && kind === 'theme') {
+          root.dataset.themeFallback = '';
+          fallbackTimer = setTimeout(() => delete root.dataset.themeFallback, 600);
+        }
         update();
-        if (!preferenceMotion.matches && document.body.animate) {
+        if (!preferenceMotion.matches && kind !== 'theme' && document.body.animate) {
           fallbackAnimation = document.body.animate([{ opacity: .65 }, { opacity: 1 }], { duration: 240, easing: 'ease-out' });
         }
         return;
       }
       root.style.setProperty('--language-shift', root.lang === 'ar' ? '-14px' : '14px');
+      if (kind === 'theme') {
+        const nextTheme = root.dataset.theme === 'light' ? 'dark' : 'light';
+        const bounds = themeButton.getBoundingClientRect();
+        const x = Math.max(0, Math.min(innerWidth, bounds.left + bounds.width / 2));
+        const y = Math.max(0, Math.min(innerHeight, bounds.top + bounds.height / 2));
+        const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        root.style.setProperty('--theme-origin', `${x}px ${y}px`);
+        root.style.setProperty('--theme-radius', `${Math.ceil(radius)}px`);
+        root.dataset.themeDirection = nextTheme === 'dark' ? 'reverse' : 'forward';
+      }
       root.dataset.preferenceTransition = kind;
       const transition = document.startViewTransition(update);
       preferenceTransition = transition;
       const cleanup = () => {
         if (preferenceTransition !== transition) return;
         delete root.dataset.preferenceTransition;
+        delete root.dataset.themeDirection;
         preferenceTransition = null;
       };
       // A skipped or hidden-tab transition still applies the preference.
@@ -248,6 +266,8 @@
     if (preferenceMotion.matches) {
       preferenceTransition?.skipTransition();
       fallbackAnimation?.cancel();
+      clearTimeout(fallbackTimer);
+      delete root.dataset.themeFallback;
     }
   });
   themeButton.addEventListener('click', () => transitionPreference('theme', () => {
